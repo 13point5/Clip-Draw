@@ -1,0 +1,14 @@
+body {
+    display: grid;
+    place-items: center;
+}
+
+#canvas {
+    border: 2px solid black;
+}
+
+.actions-container {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+}
