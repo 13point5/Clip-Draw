@@ -3,12 +3,47 @@ body {
     place-items: center;
 }
 
+button {
+    cursor: pointer;
+}
+
 #canvas {
     border: 2px solid black;
 }
 
 .actions-container {
+    width: 14rem;
     margin-top: 2rem;
     display: flex;
-    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#canvas-dims-form {
+    margin-top: 2rem;
+    width: 14rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+}
+
+#canvas-dims-form input {
+    width: 3rem;
+}
+
+#canvas-dims-form button {
+    width: 100%;
+}
+
+.input-containers {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.clip-path-container {
+    margin-top: 1rem;
 }

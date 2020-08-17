@@ -15,6 +15,31 @@
             <button id="edit">Edit</button>
             <button id="get-path">Get clip-path</button>
         </div>
+        <form id="canvas-dims-form">
+            <div class="input-containers">
+                <div id="cWidth-container">
+                    <label for="cWidth">Width</label>
+                    <input
+                        type="number"
+                        name="cWidth"
+                        id="cWidth"
+                        placeholder="300"
+                    />
+                </div>
+                <div id="cHeight-container">
+                    <label for="cHeight">Height</label>
+                    <input
+                        type="number"
+                        name="cHeight"
+                        id="cHeight"
+                        placeholder="300"
+                    />
+                </div>
+            </div>
+
+            <button type="submit">Change dimensions</button>
+        </form>
+
         <div class="clip-path-container">
             <p id="clip-path-code"></p>
         </div>

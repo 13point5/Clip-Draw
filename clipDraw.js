@@ -9,11 +9,14 @@ const getPathBtn = document.getElementById("get-path");
 const editPolygonBtn = document.getElementById("edit");
 const clearCanvasBtn = document.getElementById("clear");
 const clipPathCodeElement = document.getElementById("clip-path-code");
+const changeCanvasDimsForm = document.getElementById("canvas-dims-form");
+const cWidthInput = document.getElementById("cWidth");
+const cHeightInput = document.getElementById("cHeight");
 
 const ctx = canvas.getContext("2d");
 
-const cWidth = canvas.width;
-const cHeight = canvas.height;
+let cWidth = canvas.width;
+let cHeight = canvas.height;
 let vertices = [];
 let isDrawing = true;
 let draggable = false;
@@ -23,6 +26,16 @@ ctx.lineWidth = 2;
 
 const setClipPathCode = (code) => {
     clipPathCodeElement.textContent = code;
+};
+
+const resetVars = () => {
+    vertices = [];
+    isDrawing = true;
+    draggable = false;
+    isMouseDown = false;
+    setClipPathCode("");
+    cWidth = canvas.width;
+    cHeight = canvas.height;
 };
 
 const getCurrentCoords = (e) => {
@@ -145,11 +158,7 @@ canvas.addEventListener("mousedown", handleMouseDown);
 canvas.addEventListener("mousemove", handleMouseMove);
 
 clearCanvasBtn.onclick = () => {
-    vertices = [];
-    isDrawing = true;
-    draggable = false;
-    isMouseDown = false;
-    setClipPathCode("");
+    resetVars();
     clearCanvas();
 };
 
@@ -177,4 +186,21 @@ getPathBtn.onclick = () => {
     const clipPathString = `clip-path: (${clipPathPoints.join(", ")});`;
 
     setClipPathCode(clipPathString);
+};
+
+changeCanvasDimsForm.onsubmit = (e) => {
+    e.preventDefault();
+    const newCanvasWidth = cWidthInput.value;
+    const newCanvasHeight = cHeightInput.value;
+
+    if (newCanvasWidth <= 0 || newCanvasHeight <= 0) {
+        alert("Enter valid dimensions for the canvas");
+        return;
+    }
+
+    canvas.width = newCanvasWidth;
+    canvas.height = newCanvasHeight;
+
+    resetVars();
+    clearCanvas();
 };
