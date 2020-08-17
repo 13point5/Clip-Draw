@@ -5,17 +5,25 @@ if (!canvas.getContext) {
     window.stop();
 }
 
-const clearCanvasBtn = document.getElementById("clear");
+const getPathBtn = document.getElementById("get-path");
 const editPolygonBtn = document.getElementById("edit");
+const clearCanvasBtn = document.getElementById("clear");
+const clipPathCodeElement = document.getElementById("clip-path-code");
 
 const ctx = canvas.getContext("2d");
 
-let isMouseDown = false;
+const cWidth = canvas.width;
+const cHeight = canvas.height;
+let vertices = [];
 let isDrawing = true;
 let draggable = false;
-let vertices = [];
+let isMouseDown = false;
 
 ctx.lineWidth = 2;
+
+const setClipPathCode = (code) => {
+    clipPathCodeElement.textContent = code;
+};
 
 const getCurrentCoords = (e) => {
     return {
@@ -25,7 +33,7 @@ const getCurrentCoords = (e) => {
 };
 
 const clearCanvas = () => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, cWidth, cHeight);
 
     if (vertices.length == 0) {
         return;
@@ -72,7 +80,8 @@ const drawPolygon = () => {
 };
 
 const completePolygon = () => {
-    vertices.push(vertices[0]);
+    if (vertices[0] !== vertices[vertices.length - 1])
+        vertices.push(vertices[0]);
     drawEdges();
 };
 
@@ -131,22 +140,41 @@ const handleMouseUp = (e) => {
     drawEdges();
 };
 
+canvas.addEventListener("mouseup", handleMouseUp);
 canvas.addEventListener("mousedown", handleMouseDown);
 canvas.addEventListener("mousemove", handleMouseMove);
-canvas.addEventListener("mouseup", handleMouseUp);
 
 clearCanvasBtn.onclick = () => {
-    isMouseDown = false;
+    vertices = [];
     isDrawing = true;
     draggable = false;
-    vertices = [];
-
+    isMouseDown = false;
+    setClipPathCode("");
     clearCanvas();
 };
 
 editPolygonBtn.onclick = () => {
     isDrawing = false;
+    setClipPathCode("");
 
     completePolygon();
     drawAnchors();
+};
+
+getPathBtn.onclick = () => {
+    completePolygon();
+
+    const numOfVertices = vertices.length;
+
+    const clipPathPoints = vertices
+        .slice(0, numOfVertices - 1)
+        .map((vertex) => {
+            const xPercent = ((vertex.x / cWidth) * 100).toFixed(0);
+            const yPercent = ((vertex.y / cHeight) * 100).toFixed(0);
+            return `${xPercent}% ${yPercent}%`;
+        });
+
+    const clipPathString = `clip-path: (${clipPathPoints.join(", ")});`;
+
+    setClipPathCode(clipPathString);
 };
