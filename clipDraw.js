@@ -18,6 +18,7 @@ const ctx = canvas.getContext("2d");
 let cWidth = canvas.width;
 let cHeight = canvas.height;
 let vertices = [];
+let usedColors = new Set();
 let isDrawing = true;
 let draggable = false;
 let isMouseDown = false;
@@ -32,13 +33,14 @@ const resetVars = () => {
     vertices = [];
     isDrawing = true;
     draggable = false;
+    usedColors.clear();
     isMouseDown = false;
     setClipPathCode("");
     cWidth = canvas.width;
     cHeight = canvas.height;
 };
 
-const getCurrentCoords = (e) => {
+const getMouseCoords = (e) => {
     if (e.offsetX) {
         return {
             x: e.offsetX,
@@ -49,13 +51,42 @@ const getCurrentCoords = (e) => {
             x: e.layerX,
             y: e.layerY,
         };
-    } else {
-        console.log("bla");
-        return {
-            x: parseInt(e.clientX - canvas.offsetLeft),
-            y: parseInt(e.clientY - canvas.offsetTop),
-        };
     }
+};
+
+const getTouchCoords = (e, end) => {
+    const touch = end ? e.changedTouches[0] : e.touches[0];
+
+    return {
+        x: touch.pageX - touch.target.offsetLeft,
+        y: touch.pageY - touch.target.offsetTop,
+    };
+};
+
+const getCoords = (mode, e, end = false) => {
+    if (mode === "touch") {
+        return getTouchCoords(e, end);
+    } else if (mode === "mouse") {
+        return getMouseCoords(e);
+    } else {
+        alert("An anomaly has occured!");
+        window.stop();
+    }
+};
+
+const getRandomColor = () => {
+    const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+
+    if (
+        usedColors === "000000" ||
+        !usedColors.has(randomColor) ||
+        usedColors.size === 16777216
+    ) {
+        usedColors.add(randomColor);
+        return `#${randomColor}`;
+    }
+
+    return getRandomColor();
 };
 
 const clearCanvas = () => {
@@ -73,12 +104,11 @@ const drawSingleLine = (x1, y1, x2, y2) => {
     ctx.stroke();
 };
 
-const drawSingleCircle = (pos, color = "red", size = 8) => {
-    ctx.strokeStyle = color;
+const drawSingleCircle = (vertex, size = 8) => {
     ctx.beginPath();
-    ctx.arc(pos.x, pos.y, size, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.strokeStyle = "black";
+    ctx.fillStyle = vertex.color;
+    ctx.arc(vertex.x, vertex.y, size, 0, Math.PI * 2);
+    ctx.fill();
 };
 
 const drawAnchors = () => {
@@ -111,51 +141,52 @@ const completePolygon = () => {
     drawEdges();
 };
 
-const handleMouseDown = (e) => {
+const handleStart = (mode, e) => {
+    const coords = getCoords(mode, e);
+
     isMouseDown = true;
-    const currCoords = getCurrentCoords(e);
 
     if (!isDrawing) {
         for (let idx = 0; idx < vertices.length; idx++) {
             drawSingleCircle(vertices[idx]);
-            if (ctx.isPointInPath(currCoords.x, currCoords.y)) {
+            if (ctx.isPointInPath(coords.x, coords.y)) {
                 draggable = idx + 1;
                 break;
             }
         }
     } else {
         if (vertices.length === 0) {
-            vertices.push({ x: currCoords.x, y: currCoords.y });
+            vertices.push({
+                x: coords.x,
+                y: coords.y,
+                color: getRandomColor(),
+            });
         }
     }
-
-    e.preventDefault();
 };
 
-const handleMouseMove = (e) => {
+const handleMove = (mode, e) => {
     if (!isMouseDown) {
         return;
     }
 
-    const currCoords = getCurrentCoords(e);
+    const coords = getCoords(mode, e);
 
     if (!isDrawing) {
         if (draggable) {
-            vertices[draggable - 1].x = currCoords.x;
-            vertices[draggable - 1].y = currCoords.y;
+            vertices[draggable - 1].x = coords.x;
+            vertices[draggable - 1].y = coords.y;
             drawPolygon();
         }
     } else {
         drawEdges();
 
         const lastPoint = vertices[vertices.length - 1];
-        drawSingleLine(lastPoint.x, lastPoint.y, currCoords.x, currCoords.y);
+        drawSingleLine(lastPoint.x, lastPoint.y, coords.x, coords.y);
     }
-
-    e.preventDefault();
 };
 
-const handleMouseUp = (e) => {
+const handleEnd = (mode, e) => {
     isMouseDown = false;
 
     if (!isDrawing) {
@@ -163,44 +194,46 @@ const handleMouseUp = (e) => {
         return;
     }
 
-    const currCoords = getCurrentCoords(e);
+    const coords = getCoords(mode, e, true);
 
-    vertices.push({ x: currCoords.x, y: currCoords.y });
+    vertices.push({ x: coords.x, y: coords.y, color: getRandomColor() });
 
     drawEdges();
 };
 
-canvas.addEventListener("mouseup", handleMouseUp);
-canvas.addEventListener("mousedown", handleMouseDown);
-canvas.addEventListener("mousemove", handleMouseMove);
+const handleMouseDown = (e) => {
+    handleStart("mouse", e);
+};
 
-// document.body.addEventListener(
-//     "touchstart",
-//     function (e) {
-//         if (e.target == canvas) {
-//             e.preventDefault();
-//         }
-//     },
-//     false
-// );
-// document.body.addEventListener(
-//     "touchend",
-//     function (e) {
-//         if (e.target == canvas) {
-//             e.preventDefault();
-//         }
-//     },
-//     false
-// );
-// document.body.addEventListener(
-//     "touchmove",
-//     function (e) {
-//         if (e.target == canvas) {
-//             e.preventDefault();
-//         }
-//     },
-//     false
-// );
+const handleMouseMove = (e) => {
+    handleMove("mouse", e);
+};
+
+const handleMouseUp = (e) => {
+    handleEnd("mouse", e);
+};
+
+const handleTouchStart = (e) => {
+    handleStart("touch", e);
+    e.preventDefault();
+};
+
+const handleTouchMove = (e) => {
+    handleMove("touch", e);
+    e.preventDefault();
+};
+
+const handleTouchEnd = (e) => {
+    handleEnd("touch", e);
+};
+
+canvas.addEventListener("mouseup", handleMouseUp, false);
+canvas.addEventListener("mousedown", handleMouseDown, false);
+canvas.addEventListener("mousemove", handleMouseMove, false);
+
+canvas.addEventListener("touchstart", handleTouchStart, false);
+canvas.addEventListener("touchmove", handleTouchMove, false);
+canvas.addEventListener("touchend", handleTouchEnd, false);
 
 clearCanvasBtn.onclick = () => {
     resetVars();
