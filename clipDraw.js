@@ -104,7 +104,7 @@ const drawSingleLine = (x1, y1, x2, y2) => {
     ctx.stroke();
 };
 
-const drawSingleCircle = (vertex, size = 8) => {
+const drawSingleCircle = (vertex, size = 12) => {
     ctx.beginPath();
     ctx.fillStyle = vertex.color;
     ctx.arc(vertex.x, vertex.y, size, 0, Math.PI * 2);
