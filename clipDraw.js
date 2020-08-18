@@ -39,10 +39,23 @@ const resetVars = () => {
 };
 
 const getCurrentCoords = (e) => {
-    return {
-        x: parseInt(e.clientX - canvas.offsetLeft),
-        y: parseInt(e.clientY - canvas.offsetTop),
-    };
+    if (e.offsetX) {
+        return {
+            x: e.offsetX,
+            y: e.offsetY,
+        };
+    } else if (e.layerX) {
+        return {
+            x: e.layerX,
+            y: e.layerY,
+        };
+    } else {
+        console.log("bla");
+        return {
+            x: parseInt(e.clientX - canvas.offsetLeft),
+            y: parseInt(e.clientY - canvas.offsetTop),
+        };
+    }
 };
 
 const clearCanvas = () => {
@@ -115,6 +128,8 @@ const handleMouseDown = (e) => {
             vertices.push({ x: currCoords.x, y: currCoords.y });
         }
     }
+
+    e.preventDefault();
 };
 
 const handleMouseMove = (e) => {
@@ -136,6 +151,8 @@ const handleMouseMove = (e) => {
         const lastPoint = vertices[vertices.length - 1];
         drawSingleLine(lastPoint.x, lastPoint.y, currCoords.x, currCoords.y);
     }
+
+    e.preventDefault();
 };
 
 const handleMouseUp = (e) => {
@@ -156,6 +173,34 @@ const handleMouseUp = (e) => {
 canvas.addEventListener("mouseup", handleMouseUp);
 canvas.addEventListener("mousedown", handleMouseDown);
 canvas.addEventListener("mousemove", handleMouseMove);
+
+// document.body.addEventListener(
+//     "touchstart",
+//     function (e) {
+//         if (e.target == canvas) {
+//             e.preventDefault();
+//         }
+//     },
+//     false
+// );
+// document.body.addEventListener(
+//     "touchend",
+//     function (e) {
+//         if (e.target == canvas) {
+//             e.preventDefault();
+//         }
+//     },
+//     false
+// );
+// document.body.addEventListener(
+//     "touchmove",
+//     function (e) {
+//         if (e.target == canvas) {
+//             e.preventDefault();
+//         }
+//     },
+//     false
+// );
 
 clearCanvasBtn.onclick = () => {
     resetVars();
