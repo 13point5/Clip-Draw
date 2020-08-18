@@ -18,6 +18,7 @@ const ctx = canvas.getContext("2d");
 let cWidth = canvas.width;
 let cHeight = canvas.height;
 let vertices = [];
+let usedColors = new Set();
 let isDrawing = true;
 let draggable = false;
 let isMouseDown = false;
@@ -32,6 +33,7 @@ const resetVars = () => {
     vertices = [];
     isDrawing = true;
     draggable = false;
+    usedColors.clear();
     isMouseDown = false;
     setClipPathCode("");
     cWidth = canvas.width;
@@ -72,6 +74,21 @@ const getCoords = (mode, e, end = false) => {
     }
 };
 
+const getRandomColor = () => {
+    const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+
+    if (
+        usedColors === "000000" ||
+        !usedColors.has(randomColor) ||
+        usedColors.size === 16777216
+    ) {
+        usedColors.add(randomColor);
+        return `#${randomColor}`;
+    }
+
+    return getRandomColor();
+};
+
 const clearCanvas = () => {
     ctx.clearRect(0, 0, cWidth, cHeight);
 
@@ -87,12 +104,11 @@ const drawSingleLine = (x1, y1, x2, y2) => {
     ctx.stroke();
 };
 
-const drawSingleCircle = (pos, color = "red", size = 8) => {
-    ctx.strokeStyle = color;
+const drawSingleCircle = (vertex, size = 8) => {
     ctx.beginPath();
-    ctx.arc(pos.x, pos.y, size, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.strokeStyle = "black";
+    ctx.fillStyle = vertex.color;
+    ctx.arc(vertex.x, vertex.y, size, 0, Math.PI * 2);
+    ctx.fill();
 };
 
 const drawAnchors = () => {
@@ -140,7 +156,11 @@ const handleStart = (mode, e) => {
         }
     } else {
         if (vertices.length === 0) {
-            vertices.push({ x: coords.x, y: coords.y });
+            vertices.push({
+                x: coords.x,
+                y: coords.y,
+                color: getRandomColor(),
+            });
         }
     }
 };
@@ -176,7 +196,7 @@ const handleEnd = (mode, e) => {
 
     const coords = getCoords(mode, e, true);
 
-    vertices.push({ x: coords.x, y: coords.y });
+    vertices.push({ x: coords.x, y: coords.y, color: getRandomColor() });
 
     drawEdges();
 };
