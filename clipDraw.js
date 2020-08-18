@@ -38,7 +38,7 @@ const resetVars = () => {
     cHeight = canvas.height;
 };
 
-const getCurrentCoords = (e) => {
+const getMouseCoords = (e) => {
     if (e.offsetX) {
         return {
             x: e.offsetX,
@@ -49,12 +49,21 @@ const getCurrentCoords = (e) => {
             x: e.layerX,
             y: e.layerY,
         };
-    } else {
-        console.log("bla");
-        return {
-            x: parseInt(e.clientX - canvas.offsetLeft),
-            y: parseInt(e.clientY - canvas.offsetTop),
-        };
+    }
+};
+
+const getTouchCoords = (e) => {
+    if (!e) e = event;
+
+    if (e.touches) {
+        if (e.touches.length == 1) {
+            // Only deal with one finger
+            let touch = e.touches[0]; // Get the information for finger #1
+            return {
+                x: touch.pageX - touch.target.offsetLeft,
+                y: touch.pageY - touch.target.offsetTop,
+            };
+        }
     }
 };
 
@@ -113,23 +122,21 @@ const completePolygon = () => {
 
 const handleMouseDown = (e) => {
     isMouseDown = true;
-    const currCoords = getCurrentCoords(e);
+    const mouseCoords = getMouseCoords(e);
 
     if (!isDrawing) {
         for (let idx = 0; idx < vertices.length; idx++) {
             drawSingleCircle(vertices[idx]);
-            if (ctx.isPointInPath(currCoords.x, currCoords.y)) {
+            if (ctx.isPointInPath(mouseCoords.x, mouseCoords.y)) {
                 draggable = idx + 1;
                 break;
             }
         }
     } else {
         if (vertices.length === 0) {
-            vertices.push({ x: currCoords.x, y: currCoords.y });
+            vertices.push({ x: mouseCoords.x, y: mouseCoords.y });
         }
     }
-
-    e.preventDefault();
 };
 
 const handleMouseMove = (e) => {
@@ -137,22 +144,20 @@ const handleMouseMove = (e) => {
         return;
     }
 
-    const currCoords = getCurrentCoords(e);
+    const mouseCoords = getMouseCoords(e);
 
     if (!isDrawing) {
         if (draggable) {
-            vertices[draggable - 1].x = currCoords.x;
-            vertices[draggable - 1].y = currCoords.y;
+            vertices[draggable - 1].x = mouseCoords.x;
+            vertices[draggable - 1].y = mouseCoords.y;
             drawPolygon();
         }
     } else {
         drawEdges();
 
         const lastPoint = vertices[vertices.length - 1];
-        drawSingleLine(lastPoint.x, lastPoint.y, currCoords.x, currCoords.y);
+        drawSingleLine(lastPoint.x, lastPoint.y, mouseCoords.x, mouseCoords.y);
     }
-
-    e.preventDefault();
 };
 
 const handleMouseUp = (e) => {
@@ -163,44 +168,81 @@ const handleMouseUp = (e) => {
         return;
     }
 
-    const currCoords = getCurrentCoords(e);
+    const mouseCoords = getMouseCoords(e);
 
-    vertices.push({ x: currCoords.x, y: currCoords.y });
+    vertices.push({ x: mouseCoords.x, y: mouseCoords.y });
 
     drawEdges();
 };
 
-canvas.addEventListener("mouseup", handleMouseUp);
-canvas.addEventListener("mousedown", handleMouseDown);
-canvas.addEventListener("mousemove", handleMouseMove);
+const handleTouchStart = (e) => {
+    isMouseDown = true;
+    const touchCoords = getTouchCoords(e);
 
-// document.body.addEventListener(
-//     "touchstart",
-//     function (e) {
-//         if (e.target == canvas) {
-//             e.preventDefault();
-//         }
-//     },
-//     false
-// );
-// document.body.addEventListener(
-//     "touchend",
-//     function (e) {
-//         if (e.target == canvas) {
-//             e.preventDefault();
-//         }
-//     },
-//     false
-// );
-// document.body.addEventListener(
-//     "touchmove",
-//     function (e) {
-//         if (e.target == canvas) {
-//             e.preventDefault();
-//         }
-//     },
-//     false
-// );
+    if (!isDrawing) {
+        for (let idx = 0; idx < vertices.length; idx++) {
+            drawSingleCircle(vertices[idx]);
+            if (ctx.isPointInPath(touchCoords.x, touchCoords.y)) {
+                draggable = idx + 1;
+                break;
+            }
+        }
+    } else {
+        if (vertices.length === 0) {
+            vertices.push({ x: touchCoords.x, y: touchCoords.y });
+        }
+    }
+
+    e.preventDefault();
+};
+
+const handleTouchMove = (e) => {
+    if (!isMouseDown) {
+        return;
+    }
+
+    const touchCoords = getTouchCoords(e);
+
+    if (!isDrawing) {
+        if (draggable) {
+            vertices[draggable - 1].x = touchCoords.x;
+            vertices[draggable - 1].y = touchCoords.y;
+            drawPolygon();
+        }
+    } else {
+        drawEdges();
+
+        const lastPoint = vertices[vertices.length - 1];
+        drawSingleLine(lastPoint.x, lastPoint.y, touchCoords.x, touchCoords.y);
+    }
+
+    e.preventDefault();
+};
+
+const handleTouchEnd = (e) => {
+    isMouseDown = false;
+
+    if (!isDrawing) {
+        draggable = false;
+        return;
+    }
+
+    let touch = e.changedTouches[0]; // Get the information for finger #1
+    vertices.push({
+        x: touch.pageX - touch.target.offsetLeft,
+        y: touch.pageY - touch.target.offsetTop,
+    });
+
+    drawEdges();
+};
+
+canvas.addEventListener("mouseup", handleMouseUp, false);
+canvas.addEventListener("mousedown", handleMouseDown, false);
+canvas.addEventListener("mousemove", handleMouseMove, false);
+
+canvas.addEventListener("touchstart", handleTouchStart, false);
+canvas.addEventListener("touchmove", handleTouchMove, false);
+canvas.addEventListener("touchend", handleTouchEnd, false);
 
 clearCanvasBtn.onclick = () => {
     resetVars();
