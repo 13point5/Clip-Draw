@@ -56,10 +56,9 @@ const getMouseCoords = (e) => {
 
 const getTouchCoords = (e, end) => {
     const touch = end ? e.changedTouches[0] : e.touches[0];
-
     return {
-        x: touch.pageX - touch.target.offsetLeft,
-        y: touch.pageY - touch.target.offsetTop,
+        x: Math.min(cWidth, Math.max(0, touch.pageX - touch.target.offsetLeft)),
+        y: Math.min(cHeight, Math.max(0, touch.pageY - touch.target.offsetTop)),
     };
 };
 
