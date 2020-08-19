@@ -1,5 +1,5 @@
 import { getCoords } from "./coords.js";
-import { getRandomColor } from "./color.js";
+import { getRandomColor, getInvertedColor } from "./color.js";
 import {
     clearCanvas,
     drawSingleLine,
@@ -34,11 +34,26 @@ let vertices = [];
 let isDrawing = true;
 let draggable = false;
 let isMouseDown = false;
+let canInteract = true;
 
 ctx.lineWidth = 2;
 
-const setClipPathCode = (code) => {
-    clipPathCodeElement.textContent = code;
+const setClipPathCode = (clipPathPoints) => {
+    if (clipPathPoints.length === 0) {
+        clipPathCodeElement.innerHTML = "";
+        return;
+    }
+
+    clipPathCodeElement.innerHTML = "clip-path: (";
+    clipPathPoints.forEach((point, idx) => {
+        const pointBgColor = vertices[idx].color;
+        const pointTextColor = getInvertedColor(pointBgColor);
+        clipPathCodeElement.innerHTML += `<span style="color:${pointTextColor};background-color:${pointBgColor};">${point}</span>`;
+        clipPathCodeElement.innerHTML +=
+            idx !== clipPathPoints.length - 1 ? ", " : "";
+    });
+
+    clipPathCodeElement.innerHTML += ");";
 };
 
 const resetVars = () => {
@@ -46,12 +61,15 @@ const resetVars = () => {
     isDrawing = true;
     draggable = false;
     isMouseDown = false;
-    setClipPathCode("");
+    canInteract = true;
+    setClipPathCode([]);
     cWidth = canvas.width;
     cHeight = canvas.height;
 };
 
 const handleStart = (mode, e) => {
+    if (!canInteract) return;
+
     const coords = getCoords(mode, e);
 
     isMouseDown = true;
@@ -76,6 +94,8 @@ const handleStart = (mode, e) => {
 };
 
 const handleMove = (mode, e) => {
+    if (!canInteract) return;
+
     if (!isMouseDown) {
         return;
     }
@@ -97,6 +117,8 @@ const handleMove = (mode, e) => {
 };
 
 const handleEnd = (mode, e) => {
+    if (!canInteract) return;
+
     isMouseDown = false;
 
     if (!isDrawing) {
@@ -155,25 +177,33 @@ clearCanvasBtn.onclick = () => {
 };
 
 reshapePolygonBtn.onclick = () => {
+    canInteract = true;
     isDrawing = false;
-    setClipPathCode("");
+    setClipPathCode([]);
 
     completePolygon(ctx, vertices);
     drawAnchors(ctx, vertices);
 };
 
 addVertexBtn.onclick = () => {
+    canInteract = true;
     if (isDrawing) return;
 
     isDrawing = true;
-    setClipPathCode("");
+    setClipPathCode([]);
 
     vertices = vertices.slice(0, vertices.length - 1);
     drawEdges(ctx, vertices);
 };
 
 getPathBtn.onclick = () => {
+    canInteract = false;
+    // isDrawing = false;
+    // draggable = false;
+    // isMouseDown = false;
+    drawEdges(ctx, vertices);
     completePolygon(ctx, vertices);
+    drawAnchors(ctx, vertices);
 
     const numOfVertices = vertices.length;
 
@@ -185,9 +215,7 @@ getPathBtn.onclick = () => {
             return `${xPercent}% ${yPercent}%`;
         });
 
-    const clipPathString = `clip-path: (${clipPathPoints.join(", ")});`;
-
-    setClipPathCode(clipPathString);
+    setClipPathCode(clipPathPoints);
 };
 
 changeCanvasDimsForm.onsubmit = (e) => {
