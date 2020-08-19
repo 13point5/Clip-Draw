@@ -1,5 +1,5 @@
-import { getRandomColor } from "./utils.js";
 import { getCoords } from "./coords.js";
+import { getRandomColor } from "./color.js";
 import {
     clearCanvas,
     drawSingleLine,
