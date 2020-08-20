@@ -9,38 +9,55 @@
     </head>
     <body>
         <h1>Clip Draw</h1>
+
         <div class="canvas-container">
             <canvas id="canvas" width="300" height="300"></canvas>
         </div>
+
         <div class="actions-container">
             <button id="clear-canvas">Clear</button>
             <button id="reshape-polygon">Reshape</button>
             <button id="add-vertex">Add vertex</button>
         </div>
-        <form id="canvas-dims-form">
-            <div class="input-containers">
-                <div id="cWidth-container">
-                    <label for="cWidth">Width</label>
-                    <input
-                        type="number"
-                        name="cWidth"
-                        id="cWidth"
-                        placeholder="300"
-                    />
+
+        <div class="settings">
+            <form id="canvas-dims-form">
+                <div class="input-containers">
+                    <div>
+                        <label for="cWidth">Width</label>
+                        <input
+                            type="number"
+                            name="cWidth"
+                            id="cWidth"
+                            placeholder="300"
+                        />
+                    </div>
+                    <div>
+                        <label for="cHeight">Height</label>
+                        <input
+                            type="number"
+                            name="cHeight"
+                            id="cHeight"
+                            placeholder="300"
+                        />
+                    </div>
                 </div>
-                <div id="cHeight-container">
-                    <label for="cHeight">Height</label>
-                    <input
-                        type="number"
-                        name="cHeight"
-                        id="cHeight"
-                        placeholder="300"
-                    />
-                </div>
+
+                <button type="submit">Change dimensions</button>
+            </form>
+
+            <div class="stroke-anchor-settings">
+                <button id="stroke-inc">+</button>
+                <p>Stroke: <span id="stroke-width">2</span>px</p>
+                <button id="stroke-dec">-</button>
             </div>
 
-            <button type="submit">Change dimensions</button>
-        </form>
+            <div class="stroke-anchor-settings">
+                <button id="anchor-inc">+</button>
+                <p>Anchor radius: <span id="anchor-width">10</span>px</p>
+                <button id="anchor-dec">-</button>
+            </div>
+        </div>
 
         <div class="clip-path-container">
             <p id="clip-path-code"></p>

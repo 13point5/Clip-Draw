@@ -17,23 +17,36 @@ if (!canvas.getContext) {
     window.stop();
 }
 
-const cWidthInput = document.getElementById("cWidth");
-const cHeightInput = document.getElementById("cHeight");
+// Actions
 const addVertexBtn = document.getElementById("add-vertex");
 const clearCanvasBtn = document.getElementById("clear-canvas");
 const reshapePolygonBtn = document.getElementById("reshape-polygon");
+
+// Settings
+const cWidthInput = document.getElementById("cWidth");
+const cHeightInput = document.getElementById("cHeight");
+
+const strokeIncBtn = document.getElementById("stroke-inc");
+const strokeDecBtn = document.getElementById("stroke-dec");
+const strokeWidthTxt = document.getElementById("stroke-width");
+
+const anchorIncBtn = document.getElementById("anchor-inc");
+const anchorDecBtn = document.getElementById("anchor-dec");
+const anchorWidthTxt = document.getElementById("anchor-width");
+
 const clipPathCodeElement = document.getElementById("clip-path-code");
 const changeCanvasDimsForm = document.getElementById("canvas-dims-form");
 
 let ctx = canvas.getContext("2d");
 
-let cWidth = canvas.width;
-let cHeight = canvas.height;
 let vertices = [];
+let anchorRadius = 10;
 let isDrawing = true;
 let draggable = false;
-let isMouseDown = false;
 let canInteract = true;
+let isMouseDown = false;
+let cWidth = canvas.width;
+let cHeight = canvas.height;
 
 ctx.lineWidth = 2;
 
@@ -91,7 +104,7 @@ const handleStart = (mode, e) => {
 
     if (!isDrawing) {
         for (let idx = 0; idx < vertices.length; idx++) {
-            drawSingleCircle(ctx, vertices[idx]);
+            drawSingleCircle(ctx, vertices[idx], anchorRadius);
             if (ctx.isPointInPath(coords.x, coords.y)) {
                 draggable = idx + 1;
                 break;
@@ -123,7 +136,7 @@ const handleMove = (mode, e) => {
         if (draggable) {
             vertices[draggable - 1].x = coords.x;
             vertices[draggable - 1].y = coords.y;
-            drawPolygon(ctx, vertices);
+            drawPolygon(ctx, vertices, anchorRadius);
         }
     } else {
         drawEdges(ctx, vertices);
@@ -202,7 +215,7 @@ reshapePolygonBtn.onclick = () => {
     setClipPathCode();
 
     completePolygon(ctx, vertices);
-    drawAnchors(ctx, vertices);
+    drawAnchors(ctx, vertices, anchorRadius);
 };
 
 addVertexBtn.onclick = () => {
@@ -218,19 +231,45 @@ addVertexBtn.onclick = () => {
 
 changeCanvasDimsForm.onsubmit = (e) => {
     e.preventDefault();
-    const newCanvasWidth = cWidthInput.value;
-    const newCanvasHeight = cHeightInput.value;
+    const newWidth = cWidthInput.value || cWidth;
+    const newHeight = cHeightInput.value || cHeight;
 
-    if (newCanvasWidth <= 0 || newCanvasHeight <= 0) {
+    if (newWidth <= 0 || newHeight <= 0) {
         alert("Enter valid dimensions for the canvas");
         return;
     }
 
-    canvas.width = newCanvasWidth;
-    canvas.height = newCanvasHeight;
-    cWidth = canvas.width;
-    cHeight = canvas.height;
+    vertices = vertices.map((vertex) => {
+        return {
+            x: Math.round((vertex.x / cWidth) * newWidth),
+            y: Math.round((vertex.y / cHeight) * newHeight),
+            color: vertex.color,
+        };
+    });
 
-    resetVars();
-    clearCanvas(ctx);
+    canvas.width = newWidth;
+    canvas.height = newHeight;
+
+    cWidth = newWidth;
+    cHeight = newHeight;
+
+    drawEdges(ctx, vertices);
+};
+
+strokeIncBtn.onclick = () => {
+    strokeWidthTxt.textContent = ++ctx.lineWidth;
+};
+
+strokeDecBtn.onclick = () => {
+    ctx.lineWidth = Math.max(2, --ctx.lineWidth);
+    strokeWidthTxt.textContent = ctx.lineWidth;
+};
+
+anchorIncBtn.onclick = () => {
+    anchorWidthTxt.textContent = ++anchorRadius;
+};
+
+anchorDecBtn.onclick = () => {
+    anchorRadius = Math.max(5, --anchorRadius);
+    anchorWidthTxt.textContent = anchorRadius;
 };

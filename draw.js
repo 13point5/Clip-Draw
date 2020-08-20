@@ -9,16 +9,16 @@ const drawSingleLine = (ctx, from, to) => {
     ctx.stroke();
 };
 
-const drawSingleCircle = (ctx, vertex, size = 12) => {
+const drawSingleCircle = (ctx, vertex, radius) => {
     ctx.beginPath();
     ctx.fillStyle = vertex.color;
-    ctx.arc(vertex.x, vertex.y, size, 0, Math.PI * 2);
+    ctx.arc(vertex.x, vertex.y, radius, 0, Math.PI * 2);
     ctx.fill();
 };
 
-const drawAnchors = (ctx, vertices) => {
+const drawAnchors = (ctx, vertices, anchorRadius) => {
     vertices.forEach((vertex) => {
-        drawSingleCircle(ctx, vertex);
+        drawSingleCircle(ctx, vertex, anchorRadius);
     });
 };
 
@@ -35,9 +35,9 @@ const drawEdges = (ctx, vertices) => {
     ctx.stroke();
 };
 
-const drawPolygon = (ctx, vertices) => {
+const drawPolygon = (ctx, vertices, anchorRadius) => {
     drawEdges(ctx, vertices);
-    drawAnchors(ctx, vertices);
+    drawAnchors(ctx, vertices, anchorRadius);
 };
 
 const completePolygon = (ctx, vertices) => {
