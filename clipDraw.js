@@ -17,14 +17,13 @@ if (!canvas.getContext) {
     window.stop();
 }
 
-const getPathBtn = document.getElementById("get-path");
-const reshapePolygonBtn = document.getElementById("reshape");
-const addVertexBtn = document.getElementById("add-vertex");
-const clearCanvasBtn = document.getElementById("clear");
-const clipPathCodeElement = document.getElementById("clip-path-code");
-const changeCanvasDimsForm = document.getElementById("canvas-dims-form");
 const cWidthInput = document.getElementById("cWidth");
 const cHeightInput = document.getElementById("cHeight");
+const addVertexBtn = document.getElementById("add-vertex");
+const clearCanvasBtn = document.getElementById("clear-canvas");
+const reshapePolygonBtn = document.getElementById("reshape-polygon");
+const clipPathCodeElement = document.getElementById("clip-path-code");
+const changeCanvasDimsForm = document.getElementById("canvas-dims-form");
 
 let ctx = canvas.getContext("2d");
 
@@ -38,13 +37,40 @@ let canInteract = true;
 
 ctx.lineWidth = 2;
 
-const setClipPathCode = (clipPathPoints) => {
+const resetVars = () => {
+    vertices = [];
+    isDrawing = true;
+    draggable = false;
+    isMouseDown = false;
+    canInteract = true;
+    setClipPathCode();
+    cWidth = canvas.width;
+    cHeight = canvas.height;
+};
+
+const getClipPathPoints = () => {
+    const numOfVertices = vertices.length;
+
+    const clipPathPoints = vertices
+        .slice(0, numOfVertices - 1)
+        .map((vertex) => {
+            const xPercent = ((vertex.x / cWidth) * 100).toFixed(0);
+            const yPercent = ((vertex.y / cHeight) * 100).toFixed(0);
+            return `${xPercent}% ${yPercent}%`;
+        });
+
+    return clipPathPoints;
+};
+
+const setClipPathCode = () => {
+    const clipPathPoints = getClipPathPoints();
+
     if (clipPathPoints.length === 0) {
         clipPathCodeElement.innerHTML = "";
         return;
     }
 
-    clipPathCodeElement.innerHTML = "clip-path: (";
+    clipPathCodeElement.innerHTML = "clip-path: polygon(";
     clipPathPoints.forEach((point, idx) => {
         const pointBgColor = vertices[idx].color;
         const pointTextColor = getInvertedColor(pointBgColor);
@@ -54,17 +80,6 @@ const setClipPathCode = (clipPathPoints) => {
     });
 
     clipPathCodeElement.innerHTML += ");";
-};
-
-const resetVars = () => {
-    vertices = [];
-    isDrawing = true;
-    draggable = false;
-    isMouseDown = false;
-    canInteract = true;
-    setClipPathCode([]);
-    cWidth = canvas.width;
-    cHeight = canvas.height;
 };
 
 const handleStart = (mode, e) => {
@@ -91,6 +106,8 @@ const handleStart = (mode, e) => {
             });
         }
     }
+
+    setClipPathCode();
 };
 
 const handleMove = (mode, e) => {
@@ -114,6 +131,8 @@ const handleMove = (mode, e) => {
         const lastPoint = vertices[vertices.length - 1];
         drawSingleLine(ctx, lastPoint, coords);
     }
+
+    setClipPathCode();
 };
 
 const handleEnd = (mode, e) => {
@@ -135,6 +154,7 @@ const handleEnd = (mode, e) => {
     });
 
     drawEdges(ctx, vertices);
+    setClipPathCode();
 };
 
 const handleMouseDown = (e) => {
@@ -179,7 +199,7 @@ clearCanvasBtn.onclick = () => {
 reshapePolygonBtn.onclick = () => {
     canInteract = true;
     isDrawing = false;
-    setClipPathCode([]);
+    setClipPathCode();
 
     completePolygon(ctx, vertices);
     drawAnchors(ctx, vertices);
@@ -190,32 +210,10 @@ addVertexBtn.onclick = () => {
     if (isDrawing) return;
 
     isDrawing = true;
-    setClipPathCode([]);
+    setClipPathCode();
 
     vertices = vertices.slice(0, vertices.length - 1);
     drawEdges(ctx, vertices);
-};
-
-getPathBtn.onclick = () => {
-    canInteract = false;
-    // isDrawing = false;
-    // draggable = false;
-    // isMouseDown = false;
-    drawEdges(ctx, vertices);
-    completePolygon(ctx, vertices);
-    drawAnchors(ctx, vertices);
-
-    const numOfVertices = vertices.length;
-
-    const clipPathPoints = vertices
-        .slice(0, numOfVertices - 1)
-        .map((vertex) => {
-            const xPercent = ((vertex.x / cWidth) * 100).toFixed(0);
-            const yPercent = ((vertex.y / cHeight) * 100).toFixed(0);
-            return `${xPercent}% ${yPercent}%`;
-        });
-
-    setClipPathCode(clipPathPoints);
 };
 
 changeCanvasDimsForm.onsubmit = (e) => {
