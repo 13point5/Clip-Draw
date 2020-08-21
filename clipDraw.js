@@ -73,13 +73,17 @@ const resetVars = () => {
 const getClipPathPoints = () => {
     const numOfVertices = vertices.length;
 
-    const clipPathPoints = vertices
-        .slice(0, numOfVertices - 1)
-        .map((vertex) => {
-            const xPercent = ((vertex.x / cWidth) * 100).toFixed(0);
-            const yPercent = ((vertex.y / cHeight) * 100).toFixed(0);
-            return `${xPercent}% ${yPercent}%`;
-        });
+    let clipVertices = vertices;
+
+    if (vertices[0] === vertices[numOfVertices - 1]) {
+        clipVertices = vertices.slice(0, numOfVertices - 1);
+    }
+
+    const clipPathPoints = clipVertices.map((vertex) => {
+        const xPercent = ((vertex.x / cWidth) * 100).toFixed(0);
+        const yPercent = ((vertex.y / cHeight) * 100).toFixed(0);
+        return `${xPercent}% ${yPercent}%`;
+    });
 
     return clipPathPoints;
 };
@@ -110,6 +114,8 @@ const handleStart = (cursorMode, e) => {
     isMouseDown = true;
 
     if (currActionMode !== actionModes.draw) {
+        let removeIdx = -1;
+        console.log(vertices);
         for (let idx = 0; idx < vertices.length; idx++) {
             drawSingleCircle(ctx, vertices[idx], anchorRadius);
             if (ctx.isPointInPath(coords.x, coords.y)) {
@@ -117,12 +123,36 @@ const handleStart = (cursorMode, e) => {
                     draggable = idx + 1;
                     break;
                 } else if (currActionMode === actionModes.remove) {
-                    vertices.splice(idx, 1);
-                    completePolygon(ctx, vertices);
-                    drawAnchors(ctx, vertices, anchorRadius);
+                    removeIdx = idx;
                     break;
                 }
             }
+        }
+
+        if (removeIdx != -1) {
+            const numOfVertices = vertices.length;
+
+            if (removeIdx == 0) {
+                if (numOfVertices == 2) {
+                    vertices = vertices.slice(1);
+                } else if (numOfVertices == 1) {
+                    vertices = [];
+                } else {
+                    vertices = vertices.slice(1, numOfVertices - 1);
+                }
+            } else {
+                vertices.splice(removeIdx, 1);
+            }
+
+            if (vertices.length >= 3) {
+                completePolygon(ctx, vertices);
+            } else {
+                drawEdges(ctx, vertices);
+            }
+
+            console.log("aft", removeIdx, vertices);
+
+            drawAnchors(ctx, vertices, anchorRadius);
         }
     } else {
         if (vertices.length === 0) {
