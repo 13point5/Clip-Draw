@@ -18,8 +18,10 @@ if (!canvas.getContext) {
 }
 
 // Actions
-const addVertexBtn = document.getElementById("add-vertex");
 const clearCanvasBtn = document.getElementById("clear-canvas");
+
+const addVertexBtn = document.getElementById("add-vertex");
+const removeVertexBtn = document.getElementById("remove-vertex");
 const reshapePolygonBtn = document.getElementById("reshape-polygon");
 
 // Settings
@@ -39,6 +41,15 @@ const changeCanvasDimsForm = document.getElementById("canvas-dims-form");
 
 let ctx = canvas.getContext("2d");
 
+const modes = {
+    draw: "DRAW",
+    reshape: "RESHAPE",
+    addVertex: "ADD_VERTEX",
+    removeVertex: "REMOVE_VERTEX",
+};
+
+let mode = modes.draw;
+
 let vertices = [];
 let anchorRadius = 10;
 let isDrawing = true;
@@ -51,6 +62,7 @@ let cHeight = canvas.height;
 ctx.lineWidth = 2;
 
 const resetVars = () => {
+    mode = modes.draw;
     vertices = [];
     isDrawing = true;
     draggable = false;
@@ -96,8 +108,6 @@ const setClipPathCode = () => {
 };
 
 const handleStart = (mode, e) => {
-    if (!canInteract) return;
-
     const coords = getCoords(mode, e);
 
     isMouseDown = true;
@@ -124,8 +134,6 @@ const handleStart = (mode, e) => {
 };
 
 const handleMove = (mode, e) => {
-    if (!canInteract) return;
-
     if (!isMouseDown) {
         return;
     }
@@ -149,8 +157,6 @@ const handleMove = (mode, e) => {
 };
 
 const handleEnd = (mode, e) => {
-    if (!canInteract) return;
-
     isMouseDown = false;
 
     if (!isDrawing) {
@@ -210,7 +216,6 @@ clearCanvasBtn.onclick = () => {
 };
 
 reshapePolygonBtn.onclick = () => {
-    canInteract = true;
     isDrawing = false;
     setClipPathCode();
 
@@ -219,7 +224,6 @@ reshapePolygonBtn.onclick = () => {
 };
 
 addVertexBtn.onclick = () => {
-    canInteract = true;
     if (isDrawing) return;
 
     isDrawing = true;
