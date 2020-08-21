@@ -21,7 +21,7 @@ if (!canvas.getContext) {
 const clearCanvasBtn = document.getElementById("clear-canvas");
 
 const addVertexBtn = document.getElementById("add-vertex");
-const removeVertexBtn = document.getElementById("remove-vertex");
+// const removeVertexBtn = document.getElementById("remove-vertex");
 const reshapePolygonBtn = document.getElementById("reshape-polygon");
 
 // Settings
@@ -41,36 +41,30 @@ const changeCanvasDimsForm = document.getElementById("canvas-dims-form");
 
 let ctx = canvas.getContext("2d");
 
-const modes = {
+const actionModes = {
     draw: "DRAW",
     reshape: "RESHAPE",
-    addVertex: "ADD_VERTEX",
     removeVertex: "REMOVE_VERTEX",
 };
 
-let mode = modes.draw;
-
 let vertices = [];
 let anchorRadius = 10;
-let isDrawing = true;
 let draggable = false;
-let canInteract = true;
 let isMouseDown = false;
 let cWidth = canvas.width;
 let cHeight = canvas.height;
+let currActionMode = actionModes.draw;
 
 ctx.lineWidth = 2;
 
 const resetVars = () => {
-    mode = modes.draw;
     vertices = [];
-    isDrawing = true;
     draggable = false;
     isMouseDown = false;
-    canInteract = true;
     setClipPathCode();
     cWidth = canvas.width;
     cHeight = canvas.height;
+    currActionMode = actionModes.draw;
 };
 
 const getClipPathPoints = () => {
@@ -107,12 +101,12 @@ const setClipPathCode = () => {
     clipPathCodeElement.innerHTML += ");";
 };
 
-const handleStart = (mode, e) => {
-    const coords = getCoords(mode, e);
+const handleStart = (cursorMode, e) => {
+    const coords = getCoords(cursorMode, e);
 
     isMouseDown = true;
 
-    if (!isDrawing) {
+    if (currActionMode !== actionModes.draw) {
         for (let idx = 0; idx < vertices.length; idx++) {
             drawSingleCircle(ctx, vertices[idx], anchorRadius);
             if (ctx.isPointInPath(coords.x, coords.y)) {
@@ -133,14 +127,14 @@ const handleStart = (mode, e) => {
     setClipPathCode();
 };
 
-const handleMove = (mode, e) => {
+const handleMove = (cursorMode, e) => {
     if (!isMouseDown) {
         return;
     }
 
-    const coords = getCoords(mode, e);
+    const coords = getCoords(cursorMode, e);
 
-    if (!isDrawing) {
+    if (currActionMode !== actionModes.draw) {
         if (draggable) {
             vertices[draggable - 1].x = coords.x;
             vertices[draggable - 1].y = coords.y;
@@ -156,15 +150,15 @@ const handleMove = (mode, e) => {
     setClipPathCode();
 };
 
-const handleEnd = (mode, e) => {
+const handleEnd = (cursorMode, e) => {
     isMouseDown = false;
 
-    if (!isDrawing) {
+    if (currActionMode !== actionModes.draw) {
         draggable = false;
         return;
     }
 
-    const coords = getCoords(mode, e, true);
+    const coords = getCoords(cursorMode, e, true);
 
     vertices.push({
         x: coords.x,
@@ -216,7 +210,7 @@ clearCanvasBtn.onclick = () => {
 };
 
 reshapePolygonBtn.onclick = () => {
-    isDrawing = false;
+    currActionMode = actionModes.reshape;
     setClipPathCode();
 
     completePolygon(ctx, vertices);
@@ -224,9 +218,9 @@ reshapePolygonBtn.onclick = () => {
 };
 
 addVertexBtn.onclick = () => {
-    if (isDrawing) return;
+    if (currActionMode === actionModes.draw) return;
 
-    isDrawing = true;
+    currActionMode = actionModes.draw;
     setClipPathCode();
 
     vertices = vertices.slice(0, vertices.length - 1);
