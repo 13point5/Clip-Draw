@@ -39,13 +39,16 @@ const anchorWidthTxt = document.getElementById("anchor-width");
 const clipPathCodeElement = document.getElementById("clip-path-code");
 const changeCanvasDimsForm = document.getElementById("canvas-dims-form");
 
-let ctx = canvas.getContext("2d");
+const ctx = canvas.getContext("2d");
+canvas.style.cursor = "crosshair";
 
 const actionModes = {
     draw: "DRAW",
     reshape: "RESHAPE",
     removeVertex: "REMOVE_VERTEX",
 };
+
+Object.freeze(actionModes);
 
 let vertices = [];
 let anchorRadius = 10;
@@ -205,12 +208,15 @@ canvas.addEventListener("touchmove", handleTouchMove, false);
 canvas.addEventListener("touchend", handleTouchEnd, false);
 
 clearCanvasBtn.onclick = () => {
+    canvas.style.cursor = "crosshair";
     resetVars();
     clearCanvas(ctx);
 };
 
 reshapePolygonBtn.onclick = () => {
+    canvas.style.cursor = "move";
     currActionMode = actionModes.reshape;
+
     setClipPathCode();
 
     completePolygon(ctx, vertices);
@@ -220,7 +226,9 @@ reshapePolygonBtn.onclick = () => {
 addVertexBtn.onclick = () => {
     if (currActionMode === actionModes.draw) return;
 
+    canvas.style.cursor = "crosshair";
     currActionMode = actionModes.draw;
+
     setClipPathCode();
 
     vertices = vertices.slice(0, vertices.length - 1);
