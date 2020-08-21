@@ -21,7 +21,7 @@ if (!canvas.getContext) {
 const clearCanvasBtn = document.getElementById("clear-canvas");
 
 const addVertexBtn = document.getElementById("add-vertex");
-// const removeVertexBtn = document.getElementById("remove-vertex");
+const removeVertexBtn = document.getElementById("remove-vertex");
 const reshapePolygonBtn = document.getElementById("reshape-polygon");
 
 // Settings
@@ -45,7 +45,7 @@ canvas.style.cursor = "crosshair";
 const actionModes = {
     draw: "DRAW",
     reshape: "RESHAPE",
-    removeVertex: "REMOVE_VERTEX",
+    remove: "REMOVE_VERTEX",
 };
 
 Object.freeze(actionModes);
@@ -113,8 +113,15 @@ const handleStart = (cursorMode, e) => {
         for (let idx = 0; idx < vertices.length; idx++) {
             drawSingleCircle(ctx, vertices[idx], anchorRadius);
             if (ctx.isPointInPath(coords.x, coords.y)) {
-                draggable = idx + 1;
-                break;
+                if (currActionMode === actionModes.reshape) {
+                    draggable = idx + 1;
+                    break;
+                } else if (currActionMode === actionModes.remove) {
+                    vertices.splice(idx, 1);
+                    completePolygon(ctx, vertices);
+                    drawAnchors(ctx, vertices, anchorRadius);
+                    break;
+                }
             }
         }
     } else {
@@ -233,6 +240,16 @@ addVertexBtn.onclick = () => {
 
     vertices = vertices.slice(0, vertices.length - 1);
     drawEdges(ctx, vertices);
+};
+
+removeVertexBtn.onclick = () => {
+    canvas.style.cursor = "pointer";
+    currActionMode = actionModes.remove;
+
+    setClipPathCode();
+
+    completePolygon(ctx, vertices);
+    drawAnchors(ctx, vertices, anchorRadius);
 };
 
 changeCanvasDimsForm.onsubmit = (e) => {
