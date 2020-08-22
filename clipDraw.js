@@ -62,18 +62,27 @@ const resetVars = () => {
     vertices = [];
     draggable = false;
     isMouseDown = false;
-    setClipPathCode();
+
     cWidth = canvas.width;
     cHeight = canvas.height;
     currActionMode = actionModes.draw;
+    setClipPathCode();
 };
 
 const getClipPathPoints = () => {
     const numOfVertices = vertices.length;
+    if (numOfVertices === 0) {
+        return [];
+    }
 
     let clipVertices = vertices;
 
-    if (vertices[0] === vertices[numOfVertices - 1]) {
+    const keys = ["x", "y", "color"];
+    const isSameLastVertices = keys.every(
+        (key) => vertices[0][key] === vertices[numOfVertices - 1][key]
+    );
+
+    if (isSameLastVertices) {
         clipVertices = vertices.slice(0, numOfVertices - 1);
     }
 
@@ -174,8 +183,18 @@ const handleMove = (cursorMode, e) => {
 
     if (currActionMode !== actionModes.draw) {
         if (draggable) {
-            vertices[draggable - 1].x = coords.x;
-            vertices[draggable - 1].y = coords.y;
+            vertices[draggable - 1] = {
+                color: vertices[draggable - 1].color,
+                ...coords,
+            };
+            // vertices[draggable - 1].x = coords.x;
+            // vertices[draggable - 1].y = coords.y;
+            if (draggable === 1) {
+                vertices[vertices.length - 1] = {
+                    color: vertices[vertices.length - 1].color,
+                    ...coords,
+                };
+            }
             drawPolygon(ctx, vertices, anchorRadius);
         }
     } else {
