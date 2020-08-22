@@ -31,4 +31,9 @@ const getCoords = (mode, e, end = false) => {
     }
 };
 
-export { getCoords };
+const isSameVertex = (v1, v2) => {
+    const keys = ["x", "y", "color"];
+    return keys.every((key) => v1[key] === v2[key]);
+};
+
+export { getCoords, isSameVertex };

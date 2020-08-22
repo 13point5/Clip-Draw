@@ -1,4 +1,4 @@
-import { getCoords } from "./coords.js";
+import { getCoords, isSameVertex } from "./coords.js";
 import { getRandomColor, getInvertedColor } from "./color.js";
 import {
     clearCanvas,
@@ -71,18 +71,14 @@ const resetVars = () => {
 
 const getClipPathPoints = () => {
     const numOfVertices = vertices.length;
+
     if (numOfVertices === 0) {
         return [];
     }
 
     let clipVertices = vertices;
 
-    const keys = ["x", "y", "color"];
-    const isSameLastVertices = keys.every(
-        (key) => vertices[0][key] === vertices[numOfVertices - 1][key]
-    );
-
-    if (isSameLastVertices) {
+    if (isSameVertex(vertices[0], vertices[numOfVertices - 1])) {
         clipVertices = vertices.slice(0, numOfVertices - 1);
     }
 

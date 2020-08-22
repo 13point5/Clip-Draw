@@ -1,3 +1,5 @@
+import { isSameVertex } from "./coords.js";
+
 const clearCanvas = (ctx) => {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 };
@@ -41,7 +43,7 @@ const drawPolygon = (ctx, vertices, anchorRadius) => {
 };
 
 const completePolygon = (ctx, vertices) => {
-    if (vertices[0] !== vertices[vertices.length - 1])
+    if (!isSameVertex(vertices[0], vertices[vertices.length - 1]))
         vertices.push(vertices[0]);
     drawEdges(ctx, vertices);
 };
