@@ -42,13 +42,11 @@ const changeCanvasDimsForm = document.getElementById("canvas-dims-form");
 const ctx = canvas.getContext("2d");
 canvas.style.cursor = "crosshair";
 
-const actionModes = {
-    draw: "DRAW",
-    reshape: "RESHAPE",
-    remove: "REMOVE_VERTEX",
-};
-
-Object.freeze(actionModes);
+const actionModes = Object.freeze({
+    draw: 0,
+    reshape: 1,
+    remove: 2,
+});
 
 let vertices = [];
 let anchorRadius = 10;
