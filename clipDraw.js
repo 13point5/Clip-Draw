@@ -49,6 +49,7 @@ const actionModes = Object.freeze({
 });
 
 let vertices = [];
+let strokeWidth = 2;
 let anchorRadius = 10;
 let draggable = false;
 let isMouseDown = false;
@@ -56,7 +57,7 @@ let cWidth = canvas.width;
 let cHeight = canvas.height;
 let currActionMode = actionModes.draw;
 
-ctx.lineWidth = 2;
+ctx.lineWidth = strokeWidth;
 
 const resetVars = () => {
     vertices = [];
@@ -113,6 +114,8 @@ const setClipPathCode = () => {
 
 const handleStart = (cursorMode, e) => {
     const coords = getCoords(cursorMode, e);
+
+    console.log(coords, vertices);
 
     isMouseDown = true;
 
@@ -176,6 +179,7 @@ const handleMove = (cursorMode, e) => {
     }
 
     const coords = getCoords(cursorMode, e);
+    console.log(coords, vertices);
 
     if (currActionMode !== actionModes.draw) {
         if (draggable) {
@@ -212,6 +216,7 @@ const handleEnd = (cursorMode, e) => {
     }
 
     const coords = getCoords(cursorMode, e, true);
+    console.log(coords, vertices);
 
     vertices.push({
         x: coords.x,
@@ -219,8 +224,9 @@ const handleEnd = (cursorMode, e) => {
         color: getRandomColor(),
     });
 
+    ctx.lineWidth = strokeWidth;
+
     drawEdges(ctx, vertices);
-    setClipPathCode();
 };
 
 const handleMouseDown = (e) => {
@@ -319,15 +325,20 @@ changeCanvasDimsForm.onsubmit = (e) => {
     cWidth = newWidth;
     cHeight = newHeight;
 
+    ctx.lineWidth = strokeWidth;
+
     drawEdges(ctx, vertices);
+
+    console.log(ctx.lineWidth);
 };
 
 strokeIncBtn.onclick = () => {
-    strokeWidthTxt.textContent = ++ctx.lineWidth;
+    ctx.lineWidth = ++strokeWidth;
+    strokeWidthTxt.textContent = ctx.lineWidth;
 };
 
 strokeDecBtn.onclick = () => {
-    ctx.lineWidth = Math.max(2, --ctx.lineWidth);
+    ctx.lineWidth = Math.max(2, --strokeWidth);
     strokeWidthTxt.textContent = ctx.lineWidth;
 };
 
