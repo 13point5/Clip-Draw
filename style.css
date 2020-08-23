@@ -68,3 +68,29 @@ button {
 #clip-path-code {
     font-family: monospace;
 }
+
+.scrollTopBtn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background-color: #333333;
+    color: white;
+    font-size: 1.5rem;
+    border: none;
+    outline: none;
+
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+
+    z-index: 100;
+
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.3s ease;
+}
+
+.showBtn {
+    opacity: 1;
+    transform: translateY(0px);
+}

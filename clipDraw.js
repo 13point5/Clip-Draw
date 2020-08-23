@@ -17,12 +17,17 @@ if (!canvas.getContext) {
     window.stop();
 }
 
+const ctx = canvas.getContext("2d");
+let rootElement = document.documentElement;
+
 // Actions
-const clearCanvasBtn = document.getElementById("clear-canvas");
 
 const addVertexBtn = document.getElementById("add-vertex");
 const removeVertexBtn = document.getElementById("remove-vertex");
 const reshapePolygonBtn = document.getElementById("reshape-polygon");
+
+const clearCanvasBtn = document.getElementById("clear-canvas");
+const scrollTopBtn = document.querySelector(".scrollTopBtn");
 
 // Settings
 const cWidthInput = document.getElementById("cWidth");
@@ -39,9 +44,6 @@ const anchorWidthTxt = document.getElementById("anchor-width");
 const clipPathCodeElement = document.getElementById("clip-path-code");
 const changeCanvasDimsForm = document.getElementById("canvas-dims-form");
 
-const ctx = canvas.getContext("2d");
-canvas.style.cursor = "crosshair";
-
 const actionModes = Object.freeze({
     draw: 0,
     reshape: 1,
@@ -57,6 +59,7 @@ let cWidth = canvas.width;
 let cHeight = canvas.height;
 let currActionMode = actionModes.draw;
 
+canvas.style.cursor = "crosshair";
 ctx.lineWidth = strokeWidth;
 
 const resetVars = () => {
@@ -115,13 +118,11 @@ const setClipPathCode = () => {
 const handleStart = (cursorMode, e) => {
     const coords = getCoords(cursorMode, e);
 
-    console.log(coords, vertices);
-
     isMouseDown = true;
 
     if (currActionMode !== actionModes.draw) {
         let removeIdx = -1;
-        console.log(vertices);
+
         for (let idx = 0; idx < vertices.length; idx++) {
             drawSingleCircle(ctx, vertices[idx], anchorRadius);
             if (ctx.isPointInPath(coords.x, coords.y)) {
@@ -156,8 +157,6 @@ const handleStart = (cursorMode, e) => {
                 drawEdges(ctx, vertices);
             }
 
-            console.log("aft", removeIdx, vertices);
-
             drawAnchors(ctx, vertices, anchorRadius);
         }
     } else {
@@ -179,7 +178,6 @@ const handleMove = (cursorMode, e) => {
     }
 
     const coords = getCoords(cursorMode, e);
-    console.log(coords, vertices);
 
     if (currActionMode !== actionModes.draw) {
         if (draggable) {
@@ -216,7 +214,6 @@ const handleEnd = (cursorMode, e) => {
     }
 
     const coords = getCoords(cursorMode, e, true);
-    console.log(coords, vertices);
 
     vertices.push({
         x: coords.x,
@@ -255,6 +252,21 @@ const handleTouchEnd = (e) => {
     handleEnd("touch", e);
 };
 
+const handleScroll = () => {
+    // do something on scroll
+    const scrollTotal = rootElement.scrollHeight - rootElement.clientHeight;
+    console.log(rootElement.scrollTop / scrollTotal > 0.8);
+    if (rootElement.scrollTop / scrollTotal > 0.8) {
+        //show button
+        scrollTopBtn.classList.add("showBtn");
+    } else {
+        //hide button
+        scrollTopBtn.classList.remove("showBtn");
+    }
+};
+
+document.addEventListener("scroll", handleScroll);
+
 canvas.addEventListener("mouseup", handleMouseUp, false);
 canvas.addEventListener("mousedown", handleMouseDown, false);
 canvas.addEventListener("mousemove", handleMouseMove, false);
@@ -262,6 +274,14 @@ canvas.addEventListener("mousemove", handleMouseMove, false);
 canvas.addEventListener("touchstart", handleTouchStart, false);
 canvas.addEventListener("touchmove", handleTouchMove, false);
 canvas.addEventListener("touchend", handleTouchEnd, false);
+
+scrollTopBtn.onclick = () => {
+    //scroll to top logic
+    rootElement.scrollTo({
+        top: 0,
+        behavior: "smooth",
+    });
+};
 
 clearCanvasBtn.onclick = () => {
     canvas.style.cursor = "crosshair";
@@ -328,8 +348,6 @@ changeCanvasDimsForm.onsubmit = (e) => {
     ctx.lineWidth = strokeWidth;
 
     drawEdges(ctx, vertices);
-
-    console.log(ctx.lineWidth);
 };
 
 strokeIncBtn.onclick = () => {
