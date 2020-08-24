@@ -1,71 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="style.css" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+      integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Slab:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
 
-        <title>Clip Draw</title>
-    </head>
-    <body>
-        <h1>Clip Draw</h1>
+    <title>Clip Draw</title>
+  </head>
+  <body>
+    <header>
+      <h1>Clip Draw</h1>
 
-        <div class="canvas-container">
-            <canvas id="canvas" width="300" height="300"></canvas>
+      <nav>
+        <ul>
+          <li>
+            <a
+              href="https://twitter.com/27upon2"
+              alt="twitter profile of Bharath"
+              target="_blank"
+              ><i class="fab fa-twitter"></i
+            ></a>
+          </li>
+          <li>
+            <a
+              href="https://github.com/13point5/Clip-Draw"
+              alt="github profile of Bharath"
+              target="_blank"
+              ><i class="fab fa-github"></i
+            ></a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="canvas-container">
+      <canvas id="canvas" width="300" height="300"></canvas>
+    </div>
+
+    <div class="actions-container">
+      <button id="clear-canvas">Clear</button>
+      <button id="reshape-polygon">Reshape</button>
+      <button id="add-vertex">Add vertex</button>
+      <button id="remove-vertex">Remove vertex</button>
+    </div>
+
+    <div class="settings">
+      <form id="canvas-dims-form" class="canvas-dims-form">
+        <div class="input-containers">
+          <div>
+            <label for="cWidth">Width</label>
+            <input type="number" name="cWidth" id="cWidth" placeholder="300" />
+          </div>
+          <div>
+            <label for="cHeight">Height</label>
+            <input
+              type="number"
+              name="cHeight"
+              id="cHeight"
+              placeholder="300"
+            />
+          </div>
         </div>
 
-        <div class="actions-container">
-            <button id="clear-canvas">Clear</button>
-            <button id="reshape-polygon">Reshape</button>
-            <button id="add-vertex">Add vertex</button>
-            <button id="remove-vertex">Remove vertex</button>
-        </div>
+        <button type="submit">Change dimensions</button>
+      </form>
 
-        <div class="settings">
-            <form id="canvas-dims-form" class="canvas-dims-form">
-                <div class="input-containers">
-                    <div>
-                        <label for="cWidth">Width</label>
-                        <input
-                            type="number"
-                            name="cWidth"
-                            id="cWidth"
-                            placeholder="300"
-                        />
-                    </div>
-                    <div>
-                        <label for="cHeight">Height</label>
-                        <input
-                            type="number"
-                            name="cHeight"
-                            id="cHeight"
-                            placeholder="300"
-                        />
-                    </div>
-                </div>
+      <div class="stroke-anchor-settings">
+        <button id="stroke-inc">+</button>
+        <p>Stroke: <span id="stroke-width">2</span>px</p>
+        <button id="stroke-dec">-</button>
+      </div>
 
-                <button type="submit">Change dimensions</button>
-            </form>
+      <div class="stroke-anchor-settings">
+        <button id="anchor-inc">+</button>
+        <p>Anchor radius: <span id="anchor-width">10</span>px</p>
+        <button id="anchor-dec">-</button>
+      </div>
+    </div>
 
-            <div class="stroke-anchor-settings">
-                <button id="stroke-inc">+</button>
-                <p>Stroke: <span id="stroke-width">2</span>px</p>
-                <button id="stroke-dec">-</button>
-            </div>
+    <div class="clip-path-container">
+      <p id="clip-path-code"></p>
+    </div>
 
-            <div class="stroke-anchor-settings">
-                <button id="anchor-inc">+</button>
-                <p>Anchor radius: <span id="anchor-width">10</span>px</p>
-                <button id="anchor-dec">-</button>
-            </div>
-        </div>
+    <button class="scrollTopBtn">^</button>
 
-        <div class="clip-path-container">
-            <p id="clip-path-code"></p>
-        </div>
-
-        <button class="scrollTopBtn">^</button>
-
-        <script type="module" src="clipDraw.js"></script>
-    </body>
+    <script type="module" src="clipDraw.js"></script>
+  </body>
 </html>
