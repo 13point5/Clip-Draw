@@ -7,7 +7,7 @@ button {
     cursor: pointer;
 }
 
-#canvas {
+canvas {
     position: relative;
     border: 2px solid black;
 }
@@ -28,7 +28,7 @@ button {
     gap: 1rem;
 }
 
-#canvas-dims-form {
+.canvas-dims-form {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -37,11 +37,11 @@ button {
     justify-content: center;
 }
 
-#canvas-dims-form input {
+.canvas-dims-form input {
     width: 3rem;
 }
 
-#canvas-dims-form button {
+.canvas-dims-form button {
     width: 100%;
 }
 
@@ -65,7 +65,7 @@ button {
     margin-top: 1rem;
 }
 
-#clip-path-code {
+.clip-path-container {
     font-family: monospace;
 }
 
