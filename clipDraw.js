@@ -18,16 +18,13 @@ if (!canvas.getContext) {
 }
 
 const ctx = canvas.getContext("2d");
-let rootElement = document.documentElement;
 
 // Actions
 
 const addVertexBtn = document.getElementById("add-vertex");
 const removeVertexBtn = document.getElementById("remove-vertex");
 const reshapePolygonBtn = document.getElementById("reshape-polygon");
-
 const clearCanvasBtn = document.getElementById("clear-canvas");
-const scrollTopBtn = document.querySelector(".scrollTopBtn");
 
 // Settings
 const settingsBtn = document.getElementById("settings-btn");
@@ -188,8 +185,7 @@ const handleMove = (cursorMode, e) => {
         color: vertices[draggable - 1].color,
         ...coords,
       };
-      // vertices[draggable - 1].x = coords.x;
-      // vertices[draggable - 1].y = coords.y;
+
       if (draggable === 1) {
         vertices[vertices.length - 1] = {
           color: vertices[vertices.length - 1].color,
@@ -255,20 +251,6 @@ const handleTouchEnd = (e) => {
   handleEnd("touch", e);
 };
 
-const handleScroll = () => {
-  // do something on scroll
-  const scrollTotal = rootElement.scrollHeight - rootElement.clientHeight;
-  if (rootElement.scrollTop / scrollTotal > 0.8) {
-    //show button
-    scrollTopBtn.classList.add("showBtn");
-  } else {
-    //hide button
-    scrollTopBtn.classList.remove("showBtn");
-  }
-};
-
-document.addEventListener("scroll", handleScroll);
-
 canvas.addEventListener("mouseup", handleMouseUp, false);
 canvas.addEventListener("mousedown", handleMouseDown, false);
 canvas.addEventListener("mousemove", handleMouseMove, false);
@@ -276,14 +258,6 @@ canvas.addEventListener("mousemove", handleMouseMove, false);
 canvas.addEventListener("touchstart", handleTouchStart, false);
 canvas.addEventListener("touchmove", handleTouchMove, false);
 canvas.addEventListener("touchend", handleTouchEnd, false);
-
-scrollTopBtn.onclick = () => {
-  //scroll to top logic
-  rootElement.scrollTo({
-    top: 0,
-    behavior: "smooth",
-  });
-};
 
 settingsBtn.onclick = () => {
   settingsBox.style.opacity = 1 - settingsBox.style.opacity;
