@@ -20,11 +20,12 @@ if (!canvas.getContext) {
 const ctx = canvas.getContext("2d");
 
 // Actions
-
 const addVertexBtn = document.getElementById("add-vertex");
 const removeVertexBtn = document.getElementById("remove-vertex");
 const reshapePolygonBtn = document.getElementById("reshape-polygon");
 const clearCanvasBtn = document.getElementById("clear-canvas");
+
+const copyCodeBtn = document.getElementById("copy-code-btn");
 
 // Settings
 const settingsBtn = document.getElementById("settings-btn");
@@ -261,6 +262,18 @@ canvas.addEventListener("touchend", handleTouchEnd, false);
 
 settingsBtn.onclick = () => {
   settingsBox.style.opacity = 1 - settingsBox.style.opacity;
+};
+
+copyCodeBtn.onclick = () => {
+  const el = document.createElement("textarea");
+  el.value = clipPathCodeElement.innerText;
+  el.setAttribute("readonly", "");
+  el.style.position = "absolute";
+  el.style.left = "-9999px";
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand("copy");
+  document.body.removeChild(el);
 };
 
 clearCanvasBtn.onclick = () => {
