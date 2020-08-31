@@ -14,7 +14,8 @@ body {
   font-family: Roboto, sans-serif;
   height: 100vh;
   display: grid;
-  grid-template-rows: 1fr 10fr 1fr;
+  /* grid-template-rows: 1fr 10fr 1fr; */
+  grid-template-rows: auto 10fr auto;
   overflow: hidden;
 }
 
@@ -45,6 +46,52 @@ header {
   flex-direction: column;
   justify-content: center;
   margin-bottom: 1rem;
+}
+
+h1 {
+  font-family: Roboto Slab, sans-serif;
+}
+
+.info-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+nav {
+  display: flex;
+  gap: 1rem;
+}
+
+a:link,
+a:visited,
+a:hover,
+a:active {
+  color: black;
+}
+
+a:hover,
+a:active {
+  text-decoration: underline;
+}
+
+.link i {
+  display: none;
+}
+
+@media all and (max-width: 480px) {
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  .link i {
+    display: block;
+    font-size: 1.35rem;
+  }
+
+  .link span {
+    display: none;
+  }
 }
 
 .actions-container {
