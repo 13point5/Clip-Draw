@@ -41,8 +41,10 @@ header {
   width: 100%;
   padding: 1rem;
   display: flex;
-  align-items: center;
+  gap: 0.5rem;
+  flex-direction: column;
   justify-content: center;
+  margin-bottom: 1rem;
 }
 
 .actions-container {
@@ -84,6 +86,11 @@ header {
     height: 2.5rem;
   }
 
+  #copy-code-btn {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
   .actions-container i {
     font-size: 1rem;
   }
@@ -104,6 +111,11 @@ footer {
   align-items: center;
   gap: 1rem;
   padding: 1rem;
+}
+
+.footer-btns {
+  display: flex;
+  gap: 1rem;
 }
 
 .settings-container {
@@ -161,10 +173,17 @@ footer {
 }
 
 #clip-path-code {
-  width: 100%;
+  /* width: 100%; */
   max-width: 100%;
   font-family: monospace;
   overflow-x: auto;
   white-space: nowrap;
   font-size: 1.5rem;
 }
+/* 
+@media all and (max-width: 375px) {
+  #clip-path-code {
+    width: 65%;
+    max-width: 65%;
+  }
+} */
