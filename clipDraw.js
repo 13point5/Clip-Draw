@@ -28,6 +28,8 @@ const clearCanvasBtn = document.getElementById("clear-canvas");
 const copyCodeBtn = document.getElementById("copy-code-btn");
 
 // Settings
+const darkLightBtn = document.getElementById("dark-light-btn");
+
 const settingsBtn = document.getElementById("settings-btn");
 const settingsBox = document.getElementById("settings-box");
 
@@ -259,6 +261,22 @@ canvas.addEventListener("mousemove", handleMouseMove, false);
 canvas.addEventListener("touchstart", handleTouchStart, false);
 canvas.addEventListener("touchmove", handleTouchMove, false);
 canvas.addEventListener("touchend", handleTouchEnd, false);
+
+darkLightBtn.onclick = () => {
+  const modeIcon = darkLightBtn.children[0];
+
+  if (modeIcon.classList.contains("fa-sun")) {
+    modeIcon.classList.remove("fa-sun");
+    modeIcon.classList.add("fa-moon");
+    ctx.strokeStyle = "white";
+  } else {
+    modeIcon.classList.remove("fa-moon");
+    modeIcon.classList.add("fa-sun");
+    ctx.strokeStyle = "black";
+  }
+
+  document.body.classList.toggle("dark-mode");
+};
 
 settingsBtn.onclick = () => {
   settingsBox.style.opacity = 1 - settingsBox.style.opacity;
