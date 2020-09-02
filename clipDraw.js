@@ -276,6 +276,13 @@ darkLightBtn.onclick = () => {
   }
 
   document.body.classList.toggle("dark-mode");
+
+  if (currActionMode === actionModes.draw) {
+    drawEdges(ctx, vertices);
+  } else {
+    completePolygon(ctx, vertices);
+    drawAnchors(ctx, vertices, anchorRadius);
+  }
 };
 
 settingsBtn.onclick = () => {

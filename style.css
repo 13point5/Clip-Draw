@@ -21,6 +21,8 @@ body {
   --action-alt-bg: #c6c8ca;
   --primary: black;
   --inv-primary: white;
+  --form-bg: #c6c8ca;
+  --form-shadow: rgba(0, 0, 0, 0.2);
 
   color: var(--primary);
   background-color: var(--inv-primary);
@@ -31,6 +33,8 @@ body.dark-mode {
   --action-alt-bg: #c6c8ca;
   --primary: white;
   --inv-primary: black;
+  --form-bg: #c6c8ca;
+  --form-shadow: rgba(255, 255, 255, 0.2);
 
   color: var(--primary);
   background-color: var(--inv-primary);
@@ -106,6 +110,7 @@ a:active {
   background: var(--inv-primary);
   color: var(--primary);
   border: none;
+  outline: none;
   font-size: 1.35rem;
 }
 
@@ -208,9 +213,10 @@ footer {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  background-color: var(--inv-primary);
+  background-color: var(--form-bg);
+  color: black;
   border-radius: 5px;
-  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 2px 6px 0px var(--form-shadow);
 }
 
 .dims-form {
