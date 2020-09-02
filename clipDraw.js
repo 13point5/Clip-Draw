@@ -29,6 +29,7 @@ const copyCodeBtn = document.getElementById("copy-code-btn");
 
 // Settings
 const darkLightBtn = document.getElementById("dark-light-btn");
+const modeIcon = darkLightBtn.children[0];
 
 const settingsBtn = document.getElementById("settings-btn");
 const settingsBox = document.getElementById("settings-box");
@@ -262,20 +263,20 @@ canvas.addEventListener("touchstart", handleTouchStart, false);
 canvas.addEventListener("touchmove", handleTouchMove, false);
 canvas.addEventListener("touchend", handleTouchEnd, false);
 
-darkLightBtn.onclick = () => {
-  const modeIcon = darkLightBtn.children[0];
-
-  if (modeIcon.classList.contains("fa-sun")) {
-    modeIcon.classList.remove("fa-sun");
-    modeIcon.classList.add("fa-moon");
-    ctx.strokeStyle = "white";
-  } else {
+const setColorScheme = (colorScheme) => {
+  if (colorScheme === "light") {
     modeIcon.classList.remove("fa-moon");
     modeIcon.classList.add("fa-sun");
+    document.body.classList.remove("dark-mode");
     ctx.strokeStyle = "black";
+  } else {
+    modeIcon.classList.remove("fa-sun");
+    modeIcon.classList.add("fa-moon");
+    document.body.classList.add("dark-mode");
+    ctx.strokeStyle = "white";
   }
 
-  document.body.classList.toggle("dark-mode");
+  if (vertices.length === 0) return;
 
   if (currActionMode === actionModes.draw) {
     drawEdges(ctx, vertices);
@@ -283,6 +284,25 @@ darkLightBtn.onclick = () => {
     completePolygon(ctx, vertices);
     drawAnchors(ctx, vertices, anchorRadius);
   }
+};
+
+if (
+  window.matchMedia &&
+  window.matchMedia("(prefers-color-scheme: dark)").matches
+) {
+  setColorScheme("dark");
+}
+
+window
+  .matchMedia("(prefers-color-scheme: dark)")
+  .addEventListener("change", (e) => {
+    const newColorScheme = e.matches ? "dark" : "light";
+    setColorScheme(newColorScheme);
+  });
+
+darkLightBtn.onclick = () => {
+  const colorScheme = modeIcon.classList.contains("fa-sun") ? "dark" : "light";
+  setColorScheme(colorScheme);
 };
 
 settingsBtn.onclick = () => {
