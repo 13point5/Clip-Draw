@@ -28,6 +28,8 @@ const clearCanvasBtn = document.getElementById("clear-canvas");
 const copyCodeBtn = document.getElementById("copy-code-btn");
 
 // Settings
+const menuBtn = document.querySelector(".menu");
+
 const darkLightBtn = document.getElementById("dark-light-btn");
 const modeIcon = darkLightBtn.children[0];
 
@@ -263,6 +265,12 @@ canvas.addEventListener("mousemove", handleMouseMove, false);
 canvas.addEventListener("touchstart", handleTouchStart, false);
 canvas.addEventListener("touchmove", handleTouchMove, false);
 canvas.addEventListener("touchend", handleTouchEnd, false);
+
+menuBtn.onclick = () => {
+  const infoLinks = document.querySelector(".info-links");
+  console.log({ infoLinks });
+  infoLinks.classList.toggle("show-links");
+};
 
 const setColorScheme = (colorScheme) => {
   if (colorScheme === "light") {

@@ -10,7 +10,7 @@
       crossorigin="anonymous"
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Slab:wght@400;500;600;700;800;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Poppins"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="style.css" />
@@ -19,24 +19,33 @@
   </head>
   <body>
     <header>
-      <div class="info-container">
+      <nav class="info-container">
         <h1>Clip Draw</h1>
 
-        <div class="info-btns">
-          <nav>
-            <ul>
-              <a href="https://github.com/13point5/Clip-Draw" class="link">
-                <i class="fab fa-github"></i>
-                <span>Github</span>
-              </a>
-            </ul>
-          </nav>
+        <ul class="info-links">
+          <!-- <li>
+            <a href="#">About</a>
+          </li>
 
-          <button id="dark-light-btn">
-            <i class="fas fa-sun"></i>
-          </button>
-        </div>
-      </div>
+          <li>
+            <a href="#">Credits</a>
+          </li> -->
+
+          <li>
+            <a href="https://github.com/13point5/Clip-Draw">Github</a>
+          </li>
+
+          <li>
+            <button id="dark-light-btn" class="normal-btn">
+              <i class="fas fa-sun"></i>
+            </button>
+          </li>
+        </ul>
+
+        <button class="menu normal-btn">
+          <i class="fas fa-bars"></i>
+        </button>
+      </nav>
 
       <div class="actions-container">
         <span title="Draw">
@@ -70,58 +79,64 @@
     </main>
 
     <footer>
-      <div class="footer-btns">
-        <div class="settings-container">
-          <button id="settings-btn" class="action-btn">
-            <i class="fas fa-cog"></i>
-          </button>
+      <div class="footer-actions-bar">
+        <div class="footer-btns">
+          <div class="settings-container">
+            <button id="settings-btn" class="action-btn">
+              <i class="fas fa-cog"></i>
+            </button>
 
-          <div id="settings-box" class="settings-forms">
-            <form id="canvas-dims-form" class="dims-form">
-              <div class="input-containers">
-                <div>
-                  <label for="cWidth">Width</label>
-                  <input
-                    type="number"
-                    name="cWidth"
-                    id="cWidth"
-                    placeholder="300"
-                  />
+            <div id="settings-box" class="settings-forms">
+              <form id="canvas-dims-form" class="dims-form">
+                <div class="input-containers">
+                  <div>
+                    <label for="cWidth">Width</label>
+                    <input
+                      type="number"
+                      name="cWidth"
+                      id="cWidth"
+                      placeholder="300"
+                    />
+                  </div>
+                  <div>
+                    <label for="cHeight">Height</label>
+                    <input
+                      type="number"
+                      name="cHeight"
+                      id="cHeight"
+                      placeholder="300"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <label for="cHeight">Height</label>
-                  <input
-                    type="number"
-                    name="cHeight"
-                    id="cHeight"
-                    placeholder="300"
-                  />
-                </div>
+
+                <button type="submit">Change dimensions</button>
+              </form>
+
+              <div class="stroke-anchor-settings">
+                <button id="stroke-inc">+</button>
+                <p>Stroke: <span id="stroke-width">2</span>px</p>
+                <button id="stroke-dec">-</button>
               </div>
 
-              <button type="submit">Change dimensions</button>
-            </form>
-
-            <div class="stroke-anchor-settings">
-              <button id="stroke-inc">+</button>
-              <p>Stroke: <span id="stroke-width">2</span>px</p>
-              <button id="stroke-dec">-</button>
-            </div>
-
-            <div class="stroke-anchor-settings">
-              <button id="anchor-inc">+</button>
-              <p>Anchor radius: <span id="anchor-width">10</span>px</p>
-              <button id="anchor-dec">-</button>
+              <div class="stroke-anchor-settings">
+                <button id="anchor-inc">+</button>
+                <p>Anchor radius: <span id="anchor-width">10</span>px</p>
+                <button id="anchor-dec">-</button>
+              </div>
             </div>
           </div>
+
+          <button id="copy-code-btn" class="action-btn">
+            <i class="far fa-clone"></i>
+          </button>
         </div>
 
-        <button id="copy-code-btn" class="action-btn">
-          <i class="far fa-clone"></i>
-        </button>
+        <p id="clip-path-code"></p>
       </div>
 
-      <p id="clip-path-code"></p>
+      <div class="madeby">
+        Made by <a href="https://twitter.com/27upon2">Bharath</a>
+      </div>
     </footer>
 
     <script type="module" src="clipDraw.js"></script>
