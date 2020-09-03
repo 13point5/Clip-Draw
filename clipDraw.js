@@ -108,6 +108,7 @@ const setClipPathCode = () => {
   }
 
   clipPathCodeElement.innerHTML = "clip-path: polygon(";
+
   clipPathPoints.forEach((point, idx) => {
     const pointBgColor = vertices[idx].color;
     const pointTextColor = getInvertedColor(pointBgColor);
@@ -276,6 +277,8 @@ const setColorScheme = (colorScheme) => {
     ctx.strokeStyle = "white";
   }
 
+  localStorage.setItem("colorScheme", colorScheme);
+
   if (vertices.length === 0) return;
 
   if (currActionMode === actionModes.draw) {
@@ -286,11 +289,17 @@ const setColorScheme = (colorScheme) => {
   }
 };
 
-if (
-  window.matchMedia &&
-  window.matchMedia("(prefers-color-scheme: dark)").matches
-) {
-  setColorScheme("dark");
+const savedColorScheme = localStorage.getItem("colorScheme");
+
+if (!savedColorScheme) {
+  if (
+    window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches
+  ) {
+    setColorScheme("dark");
+  }
+} else {
+  setColorScheme(savedColorScheme);
 }
 
 window
