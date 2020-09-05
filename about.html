@@ -14,7 +14,15 @@
 
 <body>
     <header>
-        {{>NavBar}}
+        <nav class="info-container">
+            <a href='/' class='subtle-link'>
+                <h1>Clip Draw</h1>
+            </a>
+        
+            <button id="dark-light-btn" class="normal-btn">
+                <i class="fas fa-sun"></i>
+            </button>
+        </nav>
     </header>
 
     <main>
@@ -51,7 +59,10 @@
     </main>
 
     <footer>
-        {{>MadeBy}}
+        <div class="madeby">
+            Made by <a class="subtle-link" href="https://twitter.com/27upon2">Bharath</a> | <a class="subtle-link"
+                href="/about">About</a> | <a class="subtle-link" href="https://github.com/13point5/Clip-Draw">Github</a>
+        </div>
     </footer>
 
     <script type="module" src="js/colorScheme.js"></script>
