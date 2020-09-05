@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+        integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
+        crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/style.css" />
+
+    <title>Clip Draw</title>
+</head>
+
+<body>
+    <header>
+        {{>NavBar}}
+
+        <div class="actions-container">
+            <span title="Draw">
+                <button id="add-vertex" class="action-btn">
+                    <i class="fas fa-pen-fancy"></i>
+                </button>
+            </span>
+
+            <span title="Reshape">
+                <button id="reshape-polygon" class="action-btn">
+                    <i class="fas fa-draw-polygon"></i>
+                </button>
+            </span>
+
+            <span title="Remove vertex">
+                <button id="remove-vertex" class="action-btn">
+                    <i class="fas fa-cut"></i>
+                </button>
+            </span>
+
+            <span title="Clear canvas">
+                <button id="clear-canvas" class="action-btn">
+                    <i class="fas fa-ban"></i>
+                </button>
+            </span>
+        </div>
+    </header>
+
+    <main>
+        <canvas id="canvas" width="250" height="300"></canvas>
+    </main>
+
+    <footer>
+        <div class="footer-actions-bar">
+            <div class="footer-btns">
+                <div class="settings-container">
+                    <button id="settings-btn" class="action-btn">
+                        <span title='Settings'>
+                            <i class="fas fa-cog"></i>
+                        </span>
+                    </button>
+
+                    <div id="settings-box" class="settings-forms">
+                        <form id="canvas-dims-form" class="dims-form">
+                            <div class="input-containers">
+                                <div>
+                                    <label for="cWidth">Width</label>
+                                    <input type="number" name="cWidth" id="cWidth" placeholder="300" />
+                                </div>
+                                <div>
+                                    <label for="cHeight">Height</label>
+                                    <input type="number" name="cHeight" id="cHeight" placeholder="300" />
+                                </div>
+                            </div>
+
+                            <button type="submit">Change dimensions</button>
+                        </form>
+
+                        <div class="stroke-anchor-settings">
+                            <button id="stroke-inc">+</button>
+                            <p>Stroke: <span id="stroke-width">2</span>px</p>
+                            <button id="stroke-dec">-</button>
+                        </div>
+
+                        <div class="stroke-anchor-settings">
+                            <button id="anchor-inc">+</button>
+                            <p>Anchor radius: <span id="anchor-width">10</span>px</p>
+                            <button id="anchor-dec">-</button>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="copy-code-btn" class="action-btn">
+                    <span title='Copy Code'>
+                        <i class="far fa-clone"></i>
+                    </span>
+                </button>
+            </div>
+
+            <p id="clip-path-code"></p>
+        </div>
+
+        {{>MadeBy}}
+    </footer>
+
+    <script type="module" src="js/clipDraw.js"></script>
+</body>
+
+</html>

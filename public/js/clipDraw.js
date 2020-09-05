@@ -1,6 +1,11 @@
 import { getCoords, isSameVertex } from "./coords.js";
 import { getRandomColor, getInvertedColor } from "./color.js";
 import {
+  loadColorScheme,
+  setColorScheme,
+  addSystemColorChangeListener,
+} from "./colorScheme.js";
+import {
   clearCanvas,
   drawSingleLine,
   drawSingleCircle,
@@ -28,8 +33,6 @@ const clearCanvasBtn = document.getElementById("clear-canvas");
 const copyCodeBtn = document.getElementById("copy-code-btn");
 
 // Settings
-const menuBtn = document.querySelector(".menu");
-
 const darkLightBtn = document.getElementById("dark-light-btn");
 const modeIcon = darkLightBtn.children[0];
 
@@ -59,7 +62,7 @@ const actionModes = Object.freeze({
 let vertices = [];
 let strokeWidth = 2;
 let anchorRadius = 10;
-let draggable = false;
+let dragIndex = false;
 let isMouseDown = false;
 let cWidth = canvas.width;
 let cHeight = canvas.height;
@@ -70,13 +73,24 @@ ctx.lineWidth = strokeWidth;
 
 const resetVars = () => {
   vertices = [];
-  draggable = false;
+  dragIndex = false;
   isMouseDown = false;
 
   cWidth = canvas.width;
   cHeight = canvas.height;
   currActionMode = actionModes.draw;
   setClipPathCode();
+};
+
+const redrawCanvas = () => {
+  if (vertices.length === 0) return;
+
+  if (currActionMode === actionModes.draw) {
+    drawEdges(ctx, vertices);
+  } else {
+    completePolygon(ctx, vertices);
+    drawAnchors(ctx, vertices, anchorRadius);
+  }
 };
 
 const getClipPathPoints = () => {
@@ -134,7 +148,7 @@ const handleStart = (cursorMode, e) => {
       drawSingleCircle(ctx, vertices[idx], anchorRadius);
       if (ctx.isPointInPath(coords.x, coords.y)) {
         if (currActionMode === actionModes.reshape) {
-          draggable = idx + 1;
+          dragIndex = idx + 1;
           break;
         } else if (currActionMode === actionModes.remove) {
           removeIdx = idx;
@@ -187,13 +201,13 @@ const handleMove = (cursorMode, e) => {
   const coords = getCoords(cursorMode, e);
 
   if (currActionMode !== actionModes.draw) {
-    if (draggable) {
-      vertices[draggable - 1] = {
-        color: vertices[draggable - 1].color,
+    if (dragIndex) {
+      vertices[dragIndex - 1] = {
+        color: vertices[dragIndex - 1].color,
         ...coords,
       };
 
-      if (draggable === 1) {
+      if (dragIndex === 1) {
         vertices[vertices.length - 1] = {
           color: vertices[vertices.length - 1].color,
           ...coords,
@@ -215,7 +229,7 @@ const handleEnd = (cursorMode, e) => {
   isMouseDown = false;
 
   if (currActionMode !== actionModes.draw) {
-    draggable = false;
+    dragIndex = false;
     return;
   }
 
@@ -266,64 +280,27 @@ canvas.addEventListener("touchstart", handleTouchStart, false);
 canvas.addEventListener("touchmove", handleTouchMove, false);
 canvas.addEventListener("touchend", handleTouchEnd, false);
 
-menuBtn.onclick = () => {
-  const infoLinks = document.querySelector(".info-links");
-  console.log({ infoLinks });
-  infoLinks.classList.toggle("show-links");
-};
-
-const setColorScheme = (colorScheme) => {
-  if (colorScheme === "light") {
-    modeIcon.classList.remove("fa-moon");
-    modeIcon.classList.add("fa-sun");
-    document.body.classList.remove("dark-mode");
-    ctx.strokeStyle = "black";
-  } else {
-    modeIcon.classList.remove("fa-sun");
-    modeIcon.classList.add("fa-moon");
-    document.body.classList.add("dark-mode");
-    ctx.strokeStyle = "white";
-  }
-
-  localStorage.setItem("colorScheme", colorScheme);
-
-  if (vertices.length === 0) return;
-
-  if (currActionMode === actionModes.draw) {
-    drawEdges(ctx, vertices);
-  } else {
-    completePolygon(ctx, vertices);
-    drawAnchors(ctx, vertices, anchorRadius);
-  }
-};
-
-const savedColorScheme = localStorage.getItem("colorScheme");
-
-if (!savedColorScheme) {
-  if (
-    window.matchMedia &&
-    window.matchMedia("(prefers-color-scheme: dark)").matches
-  ) {
-    setColorScheme("dark");
-  }
-} else {
-  setColorScheme(savedColorScheme);
-}
-
-window
-  .matchMedia("(prefers-color-scheme: dark)")
-  .addEventListener("change", (e) => {
-    const newColorScheme = e.matches ? "dark" : "light";
-    setColorScheme(newColorScheme);
-  });
+loadColorScheme(ctx);
+addSystemColorChangeListener(ctx, redrawCanvas);
 
 darkLightBtn.onclick = () => {
   const colorScheme = modeIcon.classList.contains("fa-sun") ? "dark" : "light";
-  setColorScheme(colorScheme);
+  setColorScheme(colorScheme, ctx);
+  redrawCanvas();
 };
 
-settingsBtn.onclick = () => {
-  settingsBox.style.opacity = 1 - settingsBox.style.opacity;
+settingsBox.onclick = (e) => {
+  e.stopPropagation();
+};
+
+settingsBtn.onclick = (e) => {
+  const displayState = settingsBox.style.display;
+  settingsBox.style.display = displayState === "flex" ? "none" : "flex";
+  e.stopPropagation();
+};
+
+document.onclick = (e) => {
+  settingsBox.style.display = "none";
 };
 
 copyCodeBtn.onclick = () => {

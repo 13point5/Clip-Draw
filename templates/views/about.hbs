@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+        integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
+        crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css">
+    <title>About | Clip Draw</title>
+</head>
+
+<body>
+    <header>
+        {{>NavBar}}
+    </header>
+
+    <main>
+        <div class="text-main">
+            <article>
+                <h2>What is this?</h2>
+                <p>
+                    Clip Draw is a tool to make it easy and intuitive to get code for the <code>clip-path</code>
+                    property of complex polygons by drawing and dragging.<br /><br />
+                    If you don't know about the <code>clip-path</code> property you can read about it <a
+                        href='https://developer.mozilla.org/en-US/docs/Web/CSS/clip-path'>here</a>.<br /><br />
+                    BTW this was made without any 3rd party library; just HTML, CSS and JS 😎
+                </p>
+            </article>
+
+            <article>
+                <h2>Credits</h2>
+                <p>I couldn't have made this without these resources:
+                <ul>
+                    <li><a href="https://zipso.net/a-simple-touchscreen-sketchpad-using-javascript-and-html5/">A Simple
+                            Touchscreen Sketchpad using Javascript and HTML5</a></li>
+                    <li><a
+                            href="https://stackoverflow.com/questions/53427699/editing-selections-of-path-points-or-line/53433286#53433286">Editing
+                            selections of path points or line</a></li>
+                    <li><a href="https://www.kirupa.com/html5/generating_random_colors.htm">Generating random colors</a>
+                    </li>
+                    <li><a
+                            href="https://stackoverflow.com/questions/35969656/how-can-i-generate-the-opposite-color-according-to-current-color">Get
+                            a contrasting color</a></li>
+                </ul>
+                </p>
+            </article>
+        </div>
+    </main>
+
+    <footer>
+        {{>MadeBy}}
+    </footer>
+
+    <script type="module" src="js/colorScheme.js"></script>
+</body>
+
+</html>

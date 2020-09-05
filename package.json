@@ -1,0 +1,19 @@
+{
+  "name": "clip-draw",
+  "version": "1.0.0",
+  "main": "server.js",
+  "repository": "git@github.com:13point5/Clip-Draw.git",
+  "author": "Bharath Sriraam R R <albharath.1305@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js -e js,hbs,css"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "hbs": "^4.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
