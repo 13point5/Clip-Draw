@@ -1,10 +1,6 @@
-import { getCoords, isSameVertex } from "./coords.js";
-import { getRandomColor, getInvertedColor } from "./color.js";
-import {
-  loadColorScheme,
-  setColorScheme,
-  addSystemColorChangeListener,
-} from "./colorScheme.js";
+import ThemeManager from "../utils/ThemeManager.js";
+import { getCoords, isSameVertex } from "../utils/coords.js";
+import { getRandomColor, getInvertedColor } from "../utils/color.js";
 import {
   clearCanvas,
   drawSingleLine,
@@ -13,7 +9,7 @@ import {
   drawEdges,
   drawPolygon,
   completePolygon,
-} from "./draw.js";
+} from "../utils/draw.js";
 
 const canvas = document.getElementById("canvas");
 
@@ -33,8 +29,8 @@ const clearCanvasBtn = document.getElementById("clear-canvas");
 const copyCodeBtn = document.getElementById("copy-code-btn");
 
 // Settings
-const darkLightBtn = document.getElementById("dark-light-btn");
-const modeIcon = darkLightBtn.children[0];
+const themeBtn = document.getElementById("dark-light-btn");
+const themeIcon = themeBtn.children[0];
 
 const settingsBtn = document.getElementById("settings-btn");
 const settingsBox = document.getElementById("settings-box");
@@ -91,6 +87,10 @@ const redrawCanvas = () => {
     completePolygon(ctx, vertices);
     drawAnchors(ctx, vertices, anchorRadius);
   }
+};
+
+const setCanvasStroke = (color) => {
+  ctx.strokeStyle = color === "light" ? "black" : "white";
 };
 
 const getClipPathPoints = () => {
@@ -280,12 +280,19 @@ canvas.addEventListener("touchstart", handleTouchStart, false);
 canvas.addEventListener("touchmove", handleTouchMove, false);
 canvas.addEventListener("touchend", handleTouchEnd, false);
 
-loadColorScheme(ctx);
-addSystemColorChangeListener(ctx, redrawCanvas);
+const themeManager = new ThemeManager(themeIcon);
 
-darkLightBtn.onclick = () => {
-  const colorScheme = modeIcon.classList.contains("fa-sun") ? "dark" : "light";
-  setColorScheme(colorScheme, ctx);
+themeManager.loadTheme();
+setCanvasStroke(themeManager.theme);
+
+themeManager.onSystemChange = () => {
+  setCanvasStroke(themeManager.theme);
+  redrawCanvas();
+};
+
+themeBtn.onclick = () => {
+  themeManager.toggleTheme();
+  setCanvasStroke(themeManager.theme);
   redrawCanvas();
 };
 
@@ -378,7 +385,7 @@ changeCanvasDimsForm.onsubmit = (e) => {
   cHeight = newHeight;
 
   ctx.lineWidth = strokeWidth;
-  ctx.strokeStyle = modeIcon.classList.contains("fa-sun") ? "black" : "white";
+  ctx.strokeStyle = themeIcon.classList.contains("fa-sun") ? "black" : "white";
 
   drawEdges(ctx, vertices);
 };
