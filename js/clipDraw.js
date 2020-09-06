@@ -378,6 +378,7 @@ changeCanvasDimsForm.onsubmit = (e) => {
   cHeight = newHeight;
 
   ctx.lineWidth = strokeWidth;
+  ctx.strokeStyle = modeIcon.classList.contains("fa-sun") ? "black" : "white";
 
   drawEdges(ctx, vertices);
 };
