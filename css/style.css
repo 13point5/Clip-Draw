@@ -281,6 +281,7 @@ footer {
   align-items: center;
   justify-content: space-between;
   height: 1.5rem;
+  font-size: 1rem;
 }
 
 .stroke-anchor-settings button {
