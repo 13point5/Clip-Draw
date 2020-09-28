@@ -3,6 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Clip Draw is a tool to make it easy and intuitive to get code for the clip-path property of complex polygons by drawing and dragging."
+    />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
@@ -10,8 +14,9 @@
       crossorigin="anonymous"
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins"
+      href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
       rel="stylesheet"
+      medial="all"
     />
     <link rel="stylesheet" href="css/style.css" />
 
@@ -25,32 +30,52 @@
           <h1>Clip Draw</h1>
         </a>
 
-        <button id="dark-light-btn" class="normal-btn">
+        <button
+          id="dark-light-btn"
+          class="normal-btn"
+          aria-label="toggle-dark-light-mode-button"
+        >
           <i class="fas fa-sun"></i>
         </button>
       </nav>
 
       <div class="actions-container">
         <span title="Draw">
-          <button id="add-vertex" class="action-btn">
+          <button
+            id="add-vertex"
+            class="action-btn"
+            aria-label="add-vertex-button"
+          >
             <i class="fas fa-pen-fancy"></i>
           </button>
         </span>
 
         <span title="Reshape">
-          <button id="reshape-polygon" class="action-btn">
+          <button
+            id="reshape-polygon"
+            class="action-btn"
+            aria-label="reshape-polygon-button"
+          >
             <i class="fas fa-draw-polygon"></i>
           </button>
         </span>
 
         <span title="Remove vertex">
-          <button id="remove-vertex" class="action-btn">
+          <button
+            id="remove-vertex"
+            class="action-btn"
+            aria-label="remove-vertex-button"
+          >
             <i class="fas fa-cut"></i>
           </button>
         </span>
 
         <span title="Clear canvas">
-          <button id="clear-canvas" class="action-btn">
+          <button
+            id="clear-canvas"
+            class="action-btn"
+            aria-label="clear-canvas-button"
+          >
             <i class="fas fa-ban"></i>
           </button>
         </span>
@@ -65,7 +90,11 @@
       <div class="footer-actions-bar">
         <div class="footer-btns">
           <div class="settings-container">
-            <button id="settings-btn" class="action-btn">
+            <button
+              id="settings-btn"
+              class="action-btn"
+              aria-label="settings-button"
+            >
               <span title="Settings">
                 <i class="fas fa-cog"></i>
               </span>
@@ -111,7 +140,11 @@
             </div>
           </div>
 
-          <button id="copy-code-btn" class="action-btn">
+          <button
+            id="copy-code-btn"
+            class="action-btn"
+            aria-label="copy-code-button"
+          >
             <span title="Copy Code">
               <i class="far fa-clone"></i>
             </span>

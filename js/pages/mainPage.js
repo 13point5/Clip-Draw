@@ -276,9 +276,9 @@ canvas.addEventListener("mouseup", handleMouseUp, false);
 canvas.addEventListener("mousedown", handleMouseDown, false);
 canvas.addEventListener("mousemove", handleMouseMove, false);
 
-canvas.addEventListener("touchstart", handleTouchStart, false);
-canvas.addEventListener("touchmove", handleTouchMove, false);
-canvas.addEventListener("touchend", handleTouchEnd, false);
+canvas.addEventListener("touchstart", handleTouchStart, { passive: true });
+canvas.addEventListener("touchmove", handleTouchMove, { passive: true });
+canvas.addEventListener("touchend", handleTouchEnd, { passive: true });
 
 const themeManager = new ThemeManager(themeIcon);
 
