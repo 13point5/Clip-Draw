@@ -1,8 +1,17 @@
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
 * {
   margin: 0;
   padding: 0;
   text-decoration: none;
-  box-sizing: border-box;
 }
 
 body {
@@ -19,7 +28,6 @@ body {
   --action-alt-bg: rgb(195, 199, 202);
   --primary: rgb(34, 34, 34);
   --inv-primary: rgb(245, 245, 245);
-  --form-bg: #c6c8ca;
   --form-shadow: rgba(0, 0, 0, 0.2);
 
   color: var(--primary);
@@ -31,7 +39,6 @@ body.dark-mode {
   --action-alt-bg: rgb(195, 199, 202);
   --primary: rgb(219, 219, 219);
   --inv-primary: rgb(34, 34, 34);
-  --form-bg: #c6c8ca;
   --form-shadow: rgba(255, 255, 255, 0.2);
 }
 
@@ -239,41 +246,55 @@ footer {
 
 .settings-forms {
   width: 14rem;
-  padding: 0.5rem;
+  padding: 0.75rem 1rem;
   position: absolute;
   bottom: 4rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  background-color: var(--form-bg);
-  color: black;
+  background-color: var(--inv-primary);
+  color: var(--primary);
   border-radius: 5px;
   box-shadow: 0px 2px 6px 0px var(--form-shadow);
   display: none;
 }
 
+.settings-forms h6 {
+  font-size: 1rem;
+  text-transform: uppercase;
+}
+
 .dims-form {
-  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-}
-
-.dims-form input {
-  width: 3rem;
 }
 
 .dims-form button {
   display: none;
 }
 
-.input-containers {
-  width: 100%;
+.input-field {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.input-field label {
+  width: 6rem;
+}
+
+.input-field input[type="number"] {
+  font-family: inherit;
+  font-size: 0.85rem;
+  width: 100%;
+  padding: 0.25rem 0.25rem;
+  border: 0;
+  border-radius: 4px;
+  box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
 }
 
 .stroke-anchor-settings {
@@ -287,6 +308,35 @@ footer {
 .stroke-anchor-settings button {
   width: 1rem;
   height: 1rem;
+}
+
+.btn-group {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-group button {
+  padding: 0.125rem 0.25rem;
+  font-size: 0.8rem;
+}
+
+fieldset input[type="radio"] {
+  opacity: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+fieldset label {
+  user-select: none;
+  background-color: var(--action-bg);
+  color: var(--inv-primary);
+  cursor: pointer;
+  margin-right: 0.5rem;
+  padding: 0.125rem 0.25rem;
+  font-size: 0.8rem;
+  border-radius: 2px;
 }
 
 #clip-path-code {
