@@ -113,7 +113,7 @@
                   />
                 </div>
                 <div class="input-field">
-                  <label for="cHeight">Height</label>
+                  <label>Height</label>
                   <input
                     type="number"
                     name="cHeight"
@@ -125,42 +125,27 @@
                 <button type="submit">Change dimensions</button>
               </form>
 
-              <!-- <div>
-                <label>Stroke</label>
-                <div class="btn-group">
-                  <button>Thin</button>
-                  <button>Normal</button>
-                  <button>Bold</button>
-                </div>
-              </div>
+              <form id="stroke-form">
+                <fieldset>
+                  <legend>Stroke</legend>
+                  <div class="buttonList">
+                    <label id="stroke-thin-label" class='active'><input type="radio" name="stroke" value="thin" checked />Thin</label>
+                    <label id="stroke-normal-label"><input type="radio" name="stroke" value="normal" />Normal</label>
+                    <label id="stroke-bold-label"><input type="radio" name="stroke" value="bold" />Bold</label>
+                  </div>
+                </fieldset>
+              </form>
 
-              <div>
-                <label>Anchor size</label>
-                <div class="btn-group">
-                  <button>Small</button>
-                  <button>Normal</button>
-                  <button>Large</button>
-                </div>
-              </div>
-
-              <fieldset>
-                <legend>Stroke</legend>
-                <label><input type="radio" name="stroke" />Thin</label>
-                <label><input type="radio" name="stroke" />Normal</label>
-                <label><input type="radio" name="stroke" />Bold</label>
-              </fieldset> -->
-
-              <div class="stroke-anchor-settings">
-                <button id="stroke-dec">-</button>
-                <span>Stroke: <span id="stroke-width">2</span>px</span>
-                <button id="stroke-inc">+</button>
-              </div>
-
-              <div class="stroke-anchor-settings">
-                <button id="anchor-dec">-</button>
-                <span>Anchor radius: <span id="anchor-width">10</span>px</span>
-                <button id="anchor-inc">+</button>
-              </div>
+              <form id="anchor-form">
+                <fieldset>
+                  <legend>Anchor</legend>
+                  <div class="buttonList">
+                    <label id="anchor-small-label" class='active'><input type="radio" name="anchor" value="small" checked />Small</label>
+                    <label id="anchor-normal-label"><input type="radio" name="anchor" value="normal" />Normal</label>
+                    <label id="anchor-large-label"><input type="radio" name="anchor" value="large" />Large</label>
+                  </div>
+                </fieldset>
+              </form>
             </div>
           </div>
 

@@ -38,13 +38,8 @@ const settingsBox = document.getElementById("settings-box");
 const cWidthInput = document.getElementById("cWidth");
 const cHeightInput = document.getElementById("cHeight");
 
-const strokeIncBtn = document.getElementById("stroke-inc");
-const strokeDecBtn = document.getElementById("stroke-dec");
-const strokeWidthTxt = document.getElementById("stroke-width");
-
-const anchorIncBtn = document.getElementById("anchor-inc");
-const anchorDecBtn = document.getElementById("anchor-dec");
-const anchorWidthTxt = document.getElementById("anchor-width");
+const strokeForm = document.getElementById("stroke-form");
+const anchorForm = document.getElementById("anchor-form");
 
 const clipPathCodeElement = document.getElementById("clip-path-code");
 const changeCanvasDimsForm = document.getElementById("canvas-dims-form");
@@ -55,9 +50,30 @@ const actionModes = Object.freeze({
   remove: 2,
 });
 
+// stroke
+let prevStrokeWidth = strokeForm.stroke.value;
+
+const strokeToPx = Object.freeze({
+  thin: 1,
+  normal: 2,
+  bold: 4,
+});
+
+let strokeWidth = strokeToPx[prevStrokeWidth];
+
+// anchor
+let prevAnchorRadius = anchorForm.anchor.value;
+
+const anchorToPx = Object.freeze({
+  small: 8,
+  normal: 10,
+  large: 12,
+});
+
+let anchorRadius = anchorToPx[prevAnchorRadius];
+
+// other
 let vertices = [];
-let strokeWidth = 2;
-let anchorRadius = 10;
 let dragIndex = false;
 let isMouseDown = false;
 let cWidth = canvas.width;
@@ -390,21 +406,49 @@ changeCanvasDimsForm.onsubmit = (e) => {
   drawEdges(ctx, vertices);
 };
 
-strokeIncBtn.onclick = () => {
-  ctx.lineWidth = ++strokeWidth;
-  strokeWidthTxt.textContent = ctx.lineWidth;
-};
+strokeForm.addEventListener("change", function (e) {
+  const elements = strokeForm.elements;
 
-strokeDecBtn.onclick = () => {
-  ctx.lineWidth = Math.max(2, --strokeWidth);
-  strokeWidthTxt.textContent = ctx.lineWidth;
-};
+  let newStrokeWidth = "";
 
-anchorIncBtn.onclick = () => {
-  anchorWidthTxt.textContent = ++anchorRadius;
-};
+  for (let i = 0; i < elements.length; i++) {
+    if (elements[i].checked) {
+      newStrokeWidth = elements[i].value;
+      break;
+    }
+  }
 
-anchorDecBtn.onclick = () => {
-  anchorRadius = Math.max(5, --anchorRadius);
-  anchorWidthTxt.textContent = anchorRadius;
-};
+  document
+    .getElementById(`stroke-${prevStrokeWidth}-label`)
+    .classList.toggle("active");
+  document
+    .getElementById(`stroke-${newStrokeWidth}-label`)
+    .classList.toggle("active");
+
+  prevStrokeWidth = newStrokeWidth;
+  strokeWidth = strokeToPx[newStrokeWidth];
+  ctx.lineWidth = strokeToPx[newStrokeWidth];
+});
+
+anchorForm.addEventListener("change", function (e) {
+  const elements = anchorForm.elements;
+
+  let newAnchorRadius = "";
+
+  for (let i = 0; i < elements.length; i++) {
+    if (elements[i].checked) {
+      newAnchorRadius = elements[i].value;
+      break;
+    }
+  }
+
+  document
+    .getElementById(`anchor-${prevAnchorRadius}-label`)
+    .classList.toggle("active");
+  document
+    .getElementById(`anchor-${newAnchorRadius}-label`)
+    .classList.toggle("active");
+
+  prevAnchorRadius = newAnchorRadius;
+  anchorRadius = anchorToPx[newAnchorRadius];
+});
