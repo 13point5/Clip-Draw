@@ -296,19 +296,6 @@ footer {
   box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
 }
 
-.stroke-anchor-settings {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 1.5rem;
-  font-size: 1rem;
-}
-
-.stroke-anchor-settings button {
-  width: 1rem;
-  height: 1rem;
-}
-
 fieldset {
   border: none;
 }
@@ -351,7 +338,6 @@ fieldset input[type="radio"] {
 
 .buttonList label:hover {
   background-color: var(--action-alt-bg);
-  /* color: var(--inv-primary);/\ */
 }
 
 .buttonList label.active {
