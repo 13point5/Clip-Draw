@@ -132,7 +132,8 @@ a:hover {
 
 .action-btn:hover,
 .action-btn:focus,
-.action-btn:active {
+.action-btn:active,
+.action-btn.active {
   background-color: var(--action-alt-bg);
 }
 

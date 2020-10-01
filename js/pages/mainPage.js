@@ -21,10 +21,10 @@ if (!canvas.getContext) {
 const ctx = canvas.getContext("2d");
 
 // Actions
-const addVertexBtn = document.getElementById("add-vertex");
-const removeVertexBtn = document.getElementById("remove-vertex");
-const reshapePolygonBtn = document.getElementById("reshape-polygon");
-const clearCanvasBtn = document.getElementById("clear-canvas");
+const drawBtn = document.getElementById("action-draw-btn");
+const reshapePolygonBtn = document.getElementById("action-reshape-btn");
+const removeVertexBtn = document.getElementById("action-removeVertex-btn");
+const clearCanvasBtn = document.getElementById("action-clearCanvas-btn");
 
 const copyCodeBtn = document.getElementById("copy-code-btn");
 
@@ -45,9 +45,9 @@ const clipPathCodeElement = document.getElementById("clip-path-code");
 const changeCanvasDimsForm = document.getElementById("canvas-dims-form");
 
 const actionModes = Object.freeze({
-  draw: 0,
-  reshape: 1,
-  remove: 2,
+  draw: "draw",
+  reshape: "reshape",
+  removeVertex: "removeVertex",
 });
 
 // stroke
@@ -83,6 +83,14 @@ let currActionMode = actionModes.draw;
 canvas.style.cursor = "crosshair";
 ctx.lineWidth = strokeWidth;
 
+const setActionMode = (mode) => {
+  document
+    .getElementById(`action-${currActionMode}-btn`)
+    .classList.toggle("active");
+  document.getElementById(`action-${mode}-btn`).classList.toggle("active");
+  currActionMode = mode;
+};
+
 const resetVars = () => {
   vertices = [];
   dragIndex = false;
@@ -90,7 +98,8 @@ const resetVars = () => {
 
   cWidth = canvas.width;
   cHeight = canvas.height;
-  currActionMode = actionModes.draw;
+
+  setActionMode(actionModes.draw);
   setClipPathCode();
 };
 
@@ -166,7 +175,7 @@ const handleStart = (cursorMode, e) => {
         if (currActionMode === actionModes.reshape) {
           dragIndex = idx + 1;
           break;
-        } else if (currActionMode === actionModes.remove) {
+        } else if (currActionMode === actionModes.removeVertex) {
           removeIdx = idx;
           break;
         }
@@ -346,7 +355,7 @@ clearCanvasBtn.onclick = () => {
 
 reshapePolygonBtn.onclick = () => {
   canvas.style.cursor = "move";
-  currActionMode = actionModes.reshape;
+  setActionMode(actionModes.reshape);
 
   setClipPathCode();
 
@@ -354,11 +363,11 @@ reshapePolygonBtn.onclick = () => {
   drawAnchors(ctx, vertices, anchorRadius);
 };
 
-addVertexBtn.onclick = () => {
+drawBtn.onclick = () => {
   if (currActionMode === actionModes.draw) return;
 
   canvas.style.cursor = "crosshair";
-  currActionMode = actionModes.draw;
+  setActionMode(actionModes.draw);
 
   setClipPathCode();
 
@@ -368,7 +377,7 @@ addVertexBtn.onclick = () => {
 
 removeVertexBtn.onclick = () => {
   canvas.style.cursor = "pointer";
-  currActionMode = actionModes.remove;
+  setActionMode(actionModes.removeVertex);
 
   setClipPathCode();
 
