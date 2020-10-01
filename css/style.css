@@ -24,19 +24,25 @@ body {
   font-family: "Poppins", sans-serif;
   font-weight: 400;
 
+  --fg: rgb(34, 34, 34);
+  --bg: rgb(245, 245, 245);
+
   --action-bg: rgb(224, 224, 224);
   --action-alt-bg: rgb(133, 133, 133);
-  --primary: rgb(34, 34, 34);
-  --inv-primary: rgb(245, 245, 245);
+
+  --btnGroup-bg: rgb(170, 170, 170);
+  --btnGroup-alt-bg: rgb(117, 117, 117);
+
   --form-shadow: rgba(0, 0, 0, 0.2);
 
-  color: var(--primary);
-  background-color: var(--inv-primary);
+  color: var(--fg);
+  background-color: var(--bg);
 }
 
 body.dark-mode {
-  --primary: rgb(219, 219, 219);
-  --inv-primary: rgb(34, 34, 34);
+  --fg: rgb(219, 219, 219);
+  --bg: rgb(34, 34, 34);
+
   --form-shadow: rgba(255, 255, 255, 0.2);
 }
 
@@ -82,7 +88,7 @@ h1 {
 
 a {
   text-decoration: none;
-  border-bottom: 1px solid var(--primary);
+  border-bottom: 1px solid var(--fg);
 
   color: inherit;
   transition: background 0.15s cubic-bezier(0.33, 0.66, 0.66, 1);
@@ -91,8 +97,8 @@ a {
 a:hover {
   padding: 2px 3px;
   border-radius: 3px;
-  background: var(--primary);
-  color: var(--inv-primary);
+  background: var(--fg);
+  color: var(--bg);
 }
 
 .subtle-link {
@@ -104,8 +110,8 @@ a:hover {
 }
 
 .normal-btn {
-  background: var(--inv-primary);
-  color: var(--primary);
+  background: var(--bg);
+  color: var(--fg);
   border: none;
   outline: none;
   font-size: 1.35rem;
@@ -171,8 +177,8 @@ ul {
 }
 
 code {
-  background-color: var(--primary);
-  color: var(--inv-primary);
+  background-color: var(--fg);
+  color: var(--bg);
   border-radius: 3px;
   padding: 2.5px;
 }
@@ -205,7 +211,7 @@ code {
 }
 
 canvas {
-  border: 2px solid var(--primary);
+  border: 2px solid var(--fg);
 }
 
 footer {
@@ -251,10 +257,10 @@ footer {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  background-color: var(--inv-primary);
-  color: var(--primary);
-  border-radius: 5px;
-  box-shadow: 0px 2px 6px 0px var(--form-shadow);
+  background-color: var(--bg);
+  color: var(--fg);
+  border: 2px solid var(--form-shadow);
+  border-radius: 7px;
   display: none;
 }
 
@@ -313,13 +319,14 @@ fieldset input[type="radio"] {
 
 .buttonList label {
   user-select: none;
-  background-color: var(--action-bg);
+  background-color: var(--btnGroup-bg);
   color: black;
   border: none;
   font-size: 0.85rem;
   padding: 0.25rem 0.35rem;
   cursor: pointer;
   margin: 0;
+  border-right: 1px solid var(--btnGroup-alt-bg);
 }
 
 .buttonList label:first-child {
@@ -330,6 +337,7 @@ fieldset input[type="radio"] {
 .buttonList label:last-child {
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
+  border: none;
 }
 
 .buttonList label:focus {
@@ -337,12 +345,12 @@ fieldset input[type="radio"] {
 }
 
 .buttonList label:hover {
-  background-color: var(--action-alt-bg);
+  background-color: var(--btnGroup-alt-bg);
 }
 
 .buttonList label.active {
-  background-color: var(--action-alt-bg);
-  color: black;
+  background-color: var(--btnGroup-alt-bg);
+  color: white;
 }
 
 #clip-path-code {
